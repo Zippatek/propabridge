@@ -1,26 +1,200 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* Brand colors — per design guideline v2.0 */
+    --color-navy:        #001a40;
+    --color-navy-light:  #002a5e;
+    --color-blue:        #006aff;
+    --color-blue-hover:  #0052cc;   /* Electric Blue hover — buttons */
+    --color-gold:        #ffc870;
+    --color-gold-hover:  #f5c842;   /* Gold hover — hero buy/sell/rent links */
+    --color-beige:       #f4f3ea;
+    --color-grey:        #4a5568;
+    --color-divider:     #cbd5e0;
+    --color-verified:    #1a7a4a;
+    /* Transition standard — 200ms ease-in-out for all interactions */
+    --transition:        200ms ease-in-out;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    /* Design guideline: Inter primary font */
+    font-family: 'Inter', 'Plus Jakarta Sans', system-ui, sans-serif;
+    background-color: #f4f3ea;
+    color: #001a40;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    color: #001a40;
+  }
+
+  p, li, span {
+    text-align: left;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  img {
+    max-width: 100%;
+    display: block;
+  }
+
+  button {
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-family: inherit;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  /* Verified badge glassmorphism */
+  .verified-badge {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 20px;
+    box-shadow: 0 2px 12px rgba(0, 26, 64, 0.14);
+  }
+
+  /* Card hover lift */
+  .card-hover {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 26, 64, 0.15);
+  }
+
+  /*
+   * ── SECTION SPACING STANDARD (approved) ──────────────────────────────
+   * Between every two page sections:
+   *   section-pb  →  112px below the section's last element (before divider)
+   *   section-pt  →  80px  above the section's header (after divider)
+   * Total visual gap = pb-28 (7rem) + pt-20 (5rem) = 192px
+   * ─────────────────────────────────────────────────────────────────────
+   */
+  .section-pb {
+    padding-bottom: 7rem;    /* 112px — Tailwind pb-28 */
+  }
+
+  .section-pt {
+    padding-top: 5rem;       /* 80px  — Tailwind pt-20 */
+  }
+
+  /* Legacy alias — retains same values for any section using section-padding */
+  .section-padding {
+    padding-top: 5rem;
+    padding-bottom: 7rem;
+  }
+
+  /* Container */
+  .container-site {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  /* Section label "● LABEL" style */
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #001a40;
+    margin-bottom: 16px;
+  }
+
+  .section-label::before {
+    content: '●';
+    color: #006aff;
+    font-size: 10px;
+  }
+
+  /* 2-line text clamp */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Focus rings — Electric Blue */
+  :focus-visible {
+    outline: 2px solid #006aff;
+    outline-offset: 2px;
+  }
+}
+
+@layer utilities {
+  /* Faint watermark text */
+  .watermark-text {
+    opacity: 0.05;
+    user-select: none;
+    pointer-events: none;
+  }
+
+  /* Typography utilities */
+  .text-display {
+    font-size: clamp(40px, 5vw, 56px);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+
+  .text-h1 {
+    font-size: clamp(32px, 3.5vw, 40px);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  .text-h2 {
+    font-size: clamp(24px, 2.5vw, 30px);
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+  }
+
+  .text-h3 {
+    font-size: clamp(20px, 2vw, 24px);
+    font-weight: 600;
+    line-height: 1.3;
+  }
 }

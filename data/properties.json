@@ -1,0 +1,88 @@
+[
+  {
+    "id": "PB-0105-DU",
+    "slug": "4-bedroom-terrace-duplex-durumi-abuja",
+    "title": "4-Bedroom Terrace Duplex + Study \u2014 Durumi, Abuja",
+    "shortDescription": "Brand new 4-bedroom terrace duplex with study, all ensuite, fitted kitchen, BQ, and solar borehole.",
+    "location": "Durumi, Abuja FCT",
+    "district": "Durumi",
+    "city": "Abuja",
+    "state": "FCT",
+    "price": 15000000,
+    "priceLabel": "\u20a615,000,000/year",
+    "status": "FOR RENT",
+    "type": "Terrace",
+    "beds": 4,
+    "baths": 5,
+    "toilets": 6,
+    "floors": 2,
+    "parkingSpaces": 4,
+    "images": [
+      "/hero-bg.webp",
+      "/images/property-2.png",
+      "/images/property-3.png",
+      "/images/property-4.png"
+    ],
+    "verified": true,
+    "verificationStatus": "VERIFIED",
+    "verificationItems": ["Title Documents Verified", "Physically Inspected"],
+    "titleDocumentAvailable": true,
+    "featured": true,
+    "createdAt": "2024-03-10T10:00:00Z",
+    "updatedAt": "2024-03-15T10:00:00Z",
+    "fullDescription": "This is a brand new 4-bedroom terrace duplex in Durumi \u2014 finished to a contemporary standard and positioned along the American International School Road corridor, one of Abuja's most established and secure neighbourhoods.\n\nEvery bedroom is ensuite. The ground floor opens into a spacious living and dining area, with a fitted kitchen with modern cabinetry leading to the rear. A family lounge on the upper floor gives you a second living space separate from the main reception. The study adds flexible room for a home office or additional accommodation. A 1-room BQ handles staff or guest needs independently.\n\nLarge windows throughout bring in natural light and give the interiors an open, airy feel. A solar-powered borehole means water supply is not dependent on PHCN or tanker schedules. Ample parking is available within the compound.\n\nThe location speaks for itself \u2014 Durumi is quiet, well-maintained, and within minutes of the American International School, Wuse 2, and the central business district. This is the kind of address that holds its value.",
+    "amenities": [
+      "Park",
+      "School/university",
+      "Highway access",
+      "Terrace",
+      "Near bus stop",
+      "Garden",
+      "Walk-in closet"
+    ],
+    "condition": "Brand New",
+    "water": "Solar-powered borehole",
+    "pricingBreakdown": {
+      "netRent": 15000000,
+      "cautionFee": 1500000,
+      "serviceCharge": 500000,
+      "agencyFeePercentage": 10,
+      "legalFeePercentage": 10,
+      "totalFirstYearCost": "\u20a618,500,000 + agency & legal fees"
+    },
+    "agent": {
+      "id": "A-01",
+      "name": "Propabridge Team",
+      "phone": "+234 809 089 2219",
+      "email": "hello@propabridge.com",
+      "verified": true
+    }
+  },
+  {
+    "id": "PB-0106-LK",
+    "slug": "commercial-shop-the-promenade-mall-lokogoma-abuja",
+    "title": "Commercial Shop \u2014 The Promenade Mall, Lokogoma",
+    "shortDescription": "Prime commercial space in the bustling Promenade Mall, Lokogoma.",
+    "location": "Lokogoma, Abuja FCT",
+    "district": "Lokogoma",
+    "city": "Abuja",
+    "state": "FCT",
+    "price": 16800000,
+    "priceLabel": "From \u20a616.8M",
+    "status": "FOR SALE",
+    "type": "Commercial",
+    "area": 12,
+    "areaLabel": "12\u201316 SQM",
+    "images": [
+      "/images/property-5.png",
+      "/images/property-6.png"
+    ],
+    "verified": true,
+    "verificationStatus": "VERIFIED",
+    "verificationItems": ["Title Documents Verified", "Physically Inspected"],
+    "titleDocumentAvailable": true,
+    "featured": true,
+    "createdAt": "2024-03-12T10:00:00Z",
+    "updatedAt": "2024-03-12T10:00:00Z"
+  }
+]
