@@ -23,11 +23,11 @@ export default function NeighborhoodPage() {
 
         {/* Pill badge — matches the reference exactly */}
         <div className="inline-flex items-center gap-2 border border-navy/20 rounded-full px-4 py-1.5 mb-8">
-          <span className="w-2 h-2 rounded-full bg-navy inline-block" aria-hidden="true" />
+          <span className="w-2 h-2 rounded-8px bg-navy inline-block" aria-hidden="true" />
           <span className="text-[11px] font-semibold text-navy uppercase tracking-[0.12em]">
             Neighborhoods
           </span>
-          <span className="w-2 h-2 rounded-full bg-navy inline-block" aria-hidden="true" />
+          <span className="w-2 h-2 rounded-8px bg-navy inline-block" aria-hidden="true" />
         </div>
 
         {/* Heading */}

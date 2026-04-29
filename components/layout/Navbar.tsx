@@ -48,7 +48,7 @@ export default function Navbar() {
   return (
     <>
       {/* Blurred Backdrop */}
-      <div 
+      <div
         className={cn(
           "fixed inset-0 z-40 bg-black/40 backdrop-blur-sm transition-opacity duration-300 lg:hidden",
           mobileOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
@@ -68,30 +68,30 @@ export default function Navbar() {
         <div className="w-full flex items-center h-[72px] shrink-0 px-4 lg:px-6">
           {/* Logo */}
           <div className="flex flex-1 justify-start">
-          <Link
-            href="/"
-            onClick={() => setMobileOpen(false)}
-            className="flex items-center gap-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue focus-visible:outline-offset-2 rounded-sm shrink-0"
-            aria-label="Propabridge — home"
-          >
-            <div className="flex items-center justify-center w-6 h-6 lg:w-7 lg:h-7 bg-navy rounded-[6px] shrink-0">
-              <HouseSimple size={14} className="lg:hidden" color="white" weight="fill" aria-hidden="true" />
-              <HouseSimple size={16} className="hidden lg:block" color="white" weight="fill" aria-hidden="true" />
-            </div>
-            <span className="font-extrabold text-blue text-[18px] lg:text-[20px] tracking-tight leading-none">
-              PROPA
-            </span>
-            <span className="font-normal text-navy text-[18px] lg:text-[20px] tracking-tight leading-none">
-            </span>
-          </Link>
+            <Link
+              href="/"
+              onClick={() => setMobileOpen(false)}
+              className="flex items-center gap-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue focus-visible:outline-offset-2 rounded-sm shrink-0"
+              aria-label="Propabridge — home"
+            >
+              <div className="flex items-center justify-center w-6 h-6 lg:w-7 lg:h-7 bg-navy rounded-[6px] shrink-0">
+                <HouseSimple size={14} className="lg:hidden" color="white" weight="fill" aria-hidden="true" />
+                <HouseSimple size={16} className="hidden lg:block" color="white" weight="fill" aria-hidden="true" />
+              </div>
+              <span className="font-extrabold text-blue text-[18px] lg:text-[20px] tracking-tight leading-none">
+                PROPA
+              </span>
+              <span className="font-normal text-navy text-[18px] lg:text-[20px] tracking-tight leading-none">
+              </span>
+            </Link>
           </div>
 
           {/* Desktop Nav */}
           <nav className="hidden lg:flex items-center justify-center gap-1 xl:gap-3" aria-label="Main navigation">
             {NAV_LINKS.map((link) =>
               link.children ? (
-                <div 
-                  key={link.label} 
+                <div
+                  key={link.label}
                   className="relative"
                   onMouseEnter={() => setActiveDropdown(link.label)}
                   onMouseLeave={() => setActiveDropdown(null)}
@@ -113,43 +113,43 @@ export default function Navbar() {
                   </Link>
                   {activeDropdown === link.label && link.label === 'LISTINGS' && (
                     <div
-                      className="absolute top-[88px] left-4 right-4 w-auto bg-gray-50 border border-gray-200 rounded-[16px] shadow-card p-6 z-50 flex gap-6 cursor-default before:absolute before:-top-8 before:left-0 before:w-full before:h-8 before:bg-transparent"
+                      className="fixed top-[96px] left-4 right-4 w-auto bg-beige rounded-[16px] shadow-[0_20px_40px_rgba(0,0,0,0.2)] p-6 z-50 flex gap-6 cursor-default before:absolute before:-top-8 before:left-0 before:w-full before:h-8 before:bg-transparent"
                       onMouseEnter={() => setActiveDropdown(link.label)}
                       onMouseLeave={() => setActiveDropdown(null)}
                       onClick={(e) => e.stopPropagation()}
                     >
                       {/* Column 1 */}
                       <Link href="/listings" className="flex-1 flex flex-col group/col cursor-pointer" onClick={() => setActiveDropdown(null)}>
-                        <div className="relative w-full aspect-[16/7] rounded-[12px] overflow-hidden mb-3">
+                        <div className="relative w-full aspect-[16/7] rounded-[12px] overflow-hidden mb-4">
                           <Image src="/images/menu/house_in_field.png" alt="All Properties" fill className="object-cover transition-transform duration-500 group-hover/col:scale-105" />
                         </div>
-                        <h3 className="text-navy font-semibold text-[18px] mb-1.5 group-hover/col:text-blue transition-colors">All Properties</h3>
-                        <p className="text-navy/70 text-[14px] leading-relaxed mb-4 flex-grow">Browse everything we've verified and uploaded, from self-contains to luxury homes.</p>
-                        <div className="text-navy font-semibold text-[13px] uppercase tracking-wider flex items-center gap-1 group-hover/col:text-blue transition-colors mt-auto">
+                        <h3 className="text-gray font-semibold text-[18px] mb-1.5 transition-colors">All Properties</h3>
+                        <p className="text-gray/70 text-[14px] leading-relaxed mb-4 flex-grow">Browse everything we've verified and uploaded, from self-contains to luxury homes.</p>
+                        <div className="text-gray font-semibold text-[13px] uppercase tracking-wider flex items-center gap-1 group-hover/col:gap-2 transition-all mt-auto">
                           SEE ALL LISTINGS <CaretRight size={12} weight="bold" />
                         </div>
                       </Link>
 
                       {/* Column 2 */}
-                      <Link href="/neighborhoods" className="flex-1 flex flex-col group/col cursor-pointer" onClick={() => setActiveDropdown(null)}>
-                        <div className="relative w-full aspect-[16/7] rounded-[12px] overflow-hidden mb-3">
+                      <Link href="/neighborhood" className="flex-1 flex flex-col group/col cursor-pointer" onClick={() => setActiveDropdown(null)}>
+                        <div className="relative w-full aspect-[16/7] rounded-[12px] overflow-hidden mb-4">
                           <Image src="/images/menu/rainy_city_street.png" alt="Neighborhoods" fill className="object-cover transition-transform duration-500 group-hover/col:scale-105" />
                         </div>
-                        <h3 className="text-navy font-semibold text-[18px] mb-1.5 group-hover/col:text-blue transition-colors">Neighborhoods</h3>
-                        <p className="text-navy/70 text-[14px] leading-relaxed mb-4 flex-grow">Discover local communities, lifestyle perks, and what makes each area special.</p>
-                        <div className="text-navy font-semibold text-[13px] uppercase tracking-wider flex items-center gap-1 group-hover/col:text-blue transition-colors mt-auto">
+                        <h3 className="text-gray font-semibold text-[18px] mb-1.5 transition-colors">Neighborhoods</h3>
+                        <p className="text-gray/70 text-[14px] leading-relaxed mb-4 flex-grow">Discover local communities, lifestyle perks, and what makes each area special.</p>
+                        <div className="text-gray font-semibold text-[13px] uppercase tracking-wider flex items-center gap-1 group-hover/col:gap-2 transition-all mt-auto">
                           EXPLORE AREAS <CaretRight size={12} weight="bold" />
                         </div>
                       </Link>
 
                       {/* Column 3 */}
                       <Link href="/listings?type=all" className="flex-1 flex flex-col group/col cursor-pointer" onClick={() => setActiveDropdown(null)}>
-                        <div className="relative w-full aspect-[16/7] rounded-[12px] overflow-hidden mb-3">
+                        <div className="relative w-full aspect-[16/7] rounded-[12px] overflow-hidden mb-4">
                           <Image src="/images/menu/men_in_suits.png" alt="Property Types" fill className="object-cover transition-transform duration-500 group-hover/col:scale-105" />
                         </div>
-                        <h3 className="text-navy font-semibold text-[18px] mb-1.5 group-hover/col:text-blue transition-colors">Property Types</h3>
-                        <p className="text-navy/70 text-[14px] leading-relaxed mb-4 flex-grow">Flat · Duplex · Detached · Bungalow<br/>· Land · Shortlet · Commercial</p>
-                        <div className="text-navy font-semibold text-[13px] uppercase tracking-wider flex items-center gap-1 group-hover/col:text-blue transition-colors mt-auto">
+                        <h3 className="text-gray font-semibold text-[18px] mb-1.5 transition-colors">Property Types</h3>
+                        <p className="text-gray/70 text-[14px] leading-relaxed mb-4 flex-grow">Flat · Duplex · Detached · Bungalow<br />· Land · Shortlet · Commercial</p>
+                        <div className="text-gray font-semibold text-[13px] uppercase tracking-wider flex items-center gap-1 group-hover/col:gap-2 transition-all mt-auto">
                           EXPLORE TYPES <CaretRight size={12} weight="bold" />
                         </div>
                       </Link>
@@ -214,7 +214,7 @@ export default function Navbar() {
         </div>
 
         {/* Mobile Navigation Links (rendered inside the expanding header) */}
-        <div 
+        <div
           className={cn(
             "lg:hidden flex flex-col items-center px-6 transition-opacity duration-300",
             mobileOpen ? "opacity-100 delay-100" : "opacity-0"

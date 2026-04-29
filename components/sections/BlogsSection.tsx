@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { House, Article, Star, Lightbulb, PaintBrush, ShareNetwork } from '@phosphor-icons/react'
+import { cn } from '@/lib/cn'
 
 // Custom hook to track mouse position universally to prevent lag
 const useMousePosition = () => {
@@ -25,15 +27,36 @@ type Blog = {
   category: string
   title: string
   image: string
+  authorName: string
+  authorImage?: string
 }
 
 const BLOGS: Blog[] = [
+  {
+    id: 'living-in-gwarinpa',
+    date: 'MAR 6, 2026',
+    category: 'GUIDE',
+    title: "What It's Actually Like to Live in Gwarinpa — A Real Resident's Guide",
+    image: '/images/blogs/rent.png',
+    authorName: 'PROPABRIDGE TEAM',
+  },
   {
     id: 'renting-abuja',
     date: 'MAR 5, 2026',
     category: 'GUIDE',
     title: 'First Time Renting in Abuja? Start Here. The Complete Honest Guide.',
     image: '/images/blogs/rent.png',
+    authorName: 'AMINU S. MUHAMMAD',
+    authorImage: '/images/blogs/author.png',
+  },
+  {
+    id: 'spot-fake-listing',
+    date: 'JAN 5, 2026',
+    category: 'GUIDE',
+    title: 'How to Spot a Fake Property Listing in Nigeria — and What to Do When You Find One',
+    image: '/images/blogs/docs.png',
+    authorName: 'AMINU S. MUHAMMAD',
+    authorImage: '/images/blogs/author.png',
   },
   {
     id: 'property-documents',
@@ -41,6 +64,16 @@ const BLOGS: Blog[] = [
     category: 'GUIDE',
     title: 'The 7 Documents You Must See Before Paying Rent on Any Nigerian Property',
     image: '/images/blogs/docs.png',
+    authorName: 'AMINU S. MUHAMMAD',
+    authorImage: '/images/blogs/author.png',
+  },
+  {
+    id: 'gwarinpa-vs-jabi',
+    date: 'FEB 5, 2026',
+    category: 'NEWS',
+    title: 'Gwarinpa vs Jabi vs Kubwa — Which Area Fits Your Budget in Abuja Right Now?',
+    image: '/images/blogs/rent.png',
+    authorName: 'PROPABRIDGE TEAM',
   },
   {
     id: 'inspection-fees',
@@ -48,10 +81,34 @@ const BLOGS: Blog[] = [
     category: 'NEWS',
     title: 'Why Inspection Fees Are Exploitative — and Why We Banned Them',
     image: '/images/blogs/fees.png',
+    authorName: 'AMINU S. MUHAMMAD',
+    authorImage: '/images/blogs/author.png',
+  },
+  {
+    id: 'abuja-prices',
+    date: 'JAN 5, 2026',
+    category: 'NEWS',
+    title: "Abuja Property Prices in 2026 — What's Actually Happening",
+    image: '/images/blogs/docs.png',
+    authorName: 'PROPABRIDGE TEAM',
+  },
+  {
+    id: 'smart-investors-minna',
+    date: 'DEC 5, 2026',
+    category: 'NEWS',
+    title: 'Why Smart Investors Are Looking at Minna and Lokogoma Right Now',
+    image: '/images/blogs/rent.png',
+    authorName: 'MUHAMMAD TUKUR',
+    authorImage: '/images/blogs/author.png',
   }
 ]
 
-export default function BlogsSection() {
+interface BlogsSectionProps {
+  limit?: number
+  isPage?: boolean
+}
+
+export default function BlogsSection({ limit = 3, isPage = false }: BlogsSectionProps) {
   const mousePos = useMousePosition()
   const [hoveredCardId, setHoveredCardId] = useState<string | null>(null)
 
@@ -59,10 +116,12 @@ export default function BlogsSection() {
   useEffect(() => setIsClient(true), [])
 
   return (
-    <section className="bg-beige section-pt section-pb relative" aria-labelledby="blogs-heading">
+    <section className={cn("bg-beige relative", isPage ? "pt-2 pb-24" : "section-pt section-pb")} aria-labelledby={isPage ? undefined : "blogs-heading"}>
 
       {/* ── TOP DIVIDER ── */}
-      <hr className="border-t border-grey-light mx-6 mb-12 md:mb-16" aria-hidden="true" />
+      {!isPage && (
+        <hr className="border-t border-grey-light mx-6 mb-12 md:mb-16" aria-hidden="true" />
+      )}
 
       {/* ── GLOBAL CUSTOM CURSOR ── */}
       {isClient && (
@@ -81,34 +140,79 @@ export default function BlogsSection() {
       <div className="container-site">
 
         {/* ── HEADER ── */}
-        <div className="relative mb-16 md:mb-24 flex justify-center pt-8">
-          <div className="absolute left-0 top-0 flex items-start gap-2 pt-1 md:pt-4">
-            <span className="inline-block w-2.5 h-2.5 rounded-sm bg-navy shrink-0 mt-[4px]" aria-hidden="true" />
-            <p className="text-[12px] font-bold text-navy uppercase tracking-[0.08em]">
-              BLOGS
-            </p>
-          </div>
+        <div className={cn("relative mb-12 md:mb-16 flex flex-col items-center", !isPage && "pt-8")}>
+          {!isPage && (
+            <div className="absolute left-0 top-0 flex items-start gap-2 pt-1 md:pt-4">
+              <span className="inline-block w-2.5 h-2.5 rounded-sm bg-navy shrink-0 mt-[4px]" aria-hidden="true" />
+              <p className="text-[12px] font-bold text-navy uppercase tracking-[0.08em]">
+                BLOGS
+              </p>
+            </div>
+          )}
+          
+          {/* ── PILL BADGE (Only for the dedicated page) ── */}
+          {isPage && (
+            <div className="flex items-center justify-center gap-2.5 bg-[#eae9e0] px-4 py-2 rounded-[8px] mb-6">
+              <div className="w-[8px] h-[8px] bg-navy rounded-[2px]" />
+              <span className="text-[12px] font-bold font-sans text-navy uppercase tracking-[0.08em]">Blogs & Insights</span>
+              <div className="w-[8px] h-[8px] bg-navy rounded-[2px]" />
+            </div>
+          )}
+
           <h2
             id="blogs-heading"
-            className="text-navy font-medium leading-[1.1] tracking-[-0.03em] max-w-[850px] text-center"
-            style={{ fontSize: 'clamp(36px, 4.5vw, 56px)' }}
+            className={cn(
+              "text-navy font-sans leading-[1.15] tracking-[-0.02em] w-full px-4 text-center",
+              isPage ? "font-medium max-w-[900px]" : "font-medium max-w-[1000px]"
+            )}
+            style={{ fontSize: isPage ? 'clamp(28px, 3.5vw, 46px)' : 'clamp(36px, 4.5vw, 56px)' }}
           >
-            News, stories, and inspiration<br className="hidden md:block" /> for better living every day
+            {isPage ? (
+              <>Everything you ever wanted to know<br className="hidden md:block" /> about buying, selling, and living better</>
+            ) : (
+              <>News, stories, and inspiration<br className="hidden md:block" /> for better living every day</>
+            )}
           </h2>
+
+          {/* ── CATEGORY FILTERS (Only for the dedicated page) ── */}
+          {isPage && (
+            <div className="flex flex-wrap items-center justify-center gap-2 md:gap-3 mt-10 w-full">
+              <button className="flex items-center gap-2 bg-navy text-white text-[13px] font-bold font-sans px-5 py-2.5 rounded-full transition-colors shadow-sm uppercase tracking-wider">
+                <Article weight="fill" size={16} />
+                ALL
+              </button>
+              <button className="flex items-center gap-2 bg-[#eae9e0] hover:bg-[#dfded5] text-navy text-[13px] font-bold font-sans px-5 py-2.5 rounded-full transition-colors uppercase tracking-wider">
+                <Star weight="regular" size={16} />
+                FEATURED
+              </button>
+              <button className="flex items-center gap-2 bg-[#eae9e0] hover:bg-[#dfded5] text-navy text-[13px] font-bold font-sans px-5 py-2.5 rounded-full transition-colors uppercase tracking-wider">
+                <Lightbulb weight="regular" size={16} />
+                GUIDE
+              </button>
+              <button className="flex items-center gap-2 bg-[#eae9e0] hover:bg-[#dfded5] text-navy text-[13px] font-bold font-sans px-5 py-2.5 rounded-full transition-colors uppercase tracking-wider">
+                <PaintBrush weight="regular" size={16} />
+                LIFESTYLE
+              </button>
+              <button className="flex items-center gap-2 bg-[#eae9e0] hover:bg-[#dfded5] text-navy text-[13px] font-bold font-sans px-5 py-2.5 rounded-full transition-colors uppercase tracking-wider">
+                <ShareNetwork weight="regular" size={16} />
+                NEWS
+              </button>
+            </div>
+          )}
         </div>
 
         {/* ── BLOG GRID ── */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-6 lg:gap-10">
-          {BLOGS.map(blog => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-6 lg:gap-8">
+          {BLOGS.slice(0, limit).map(blog => (
             <Link
               href={`/blogs/${blog.id}`}
               key={blog.id}
-              className="group block cursor-none transition-transform hover:-translate-y-1 duration-300"
+              className="group block cursor-none transition-transform hover:-translate-y-1 duration-300 flex flex-col h-full"
               onMouseEnter={() => setHoveredCardId(blog.id)}
               onMouseLeave={() => setHoveredCardId(null)}
             >
               {/* Image Thumbnail */}
-              <div className="relative w-full aspect-[4/3] md:aspect-[3/2] rounded-[24px] overflow-hidden bg-[#e0e0d5] mb-8 border border-[#ecece0]/50 shadow-sm transition-shadow">
+              <div className="relative w-full aspect-[4/3] md:aspect-[3/2] rounded-[16px] overflow-hidden bg-[#e0e0d5] mb-6 border border-[#ecece0]/50 shadow-sm transition-shadow shrink-0">
                 <Image
                   src={blog.image}
                   alt={blog.title}
@@ -118,24 +222,28 @@ export default function BlogsSection() {
               </div>
 
               {/* Data Row */}
-              <div className="flex items-center gap-2 text-navy mb-4">
-                <p className="text-[12px] font-bold tracking-[0.1em] uppercase">{blog.date}</p>
-                <div className="w-[4px] h-[4px] rounded-full bg-navy/40" />
-                <p className="text-[12px] font-bold tracking-[0.1em] uppercase">{blog.category}</p>
+              <div className="flex items-center gap-2 text-navy mb-3 shrink-0">
+                <p className="text-[12px] font-semibold tracking-[0.05em] uppercase">{blog.date}</p>
+                <div className="w-1 h-1 rounded-full bg-navy" />
+                <p className="text-[12px] font-semibold tracking-[0.05em] uppercase">{blog.category}</p>
               </div>
 
-              {/* Title - Restored to Bold and Navy-only */}
-              <h3 className="text-[20px] md:text-[23px] text-navy font-bold leading-[1.3] tracking-[-0.012em] mb-7 pr-4">
+              {/* Title */}
+              <h3 className="text-[20px] md:text-[22px] text-navy font-bold leading-[1.3] tracking-[-0.01em] mb-6 pr-4 flex-grow">
                 {blog.title}
               </h3>
 
-              {/* Author Pill - Refined Grey Background */}
-              <div className="inline-flex items-center gap-2.5 bg-[#f0f0f0] pr-4 pl-1.5 py-1.5 rounded-full border border-[#ecece0]/80">
-                <div className="relative w-7 h-7 rounded-full overflow-hidden shrink-0 border border-white">
-                  <Image src="/images/blogs/author.png" alt="Aminu S. Muhammad" fill className="object-cover" />
+              {/* Author Pill */}
+              <div className="inline-flex items-center self-start gap-2.5 bg-[#eae9e0] pr-4 pl-1.5 py-1.5 rounded-full border border-[#ecece0]/80 shrink-0">
+                <div className="relative flex items-center justify-center w-7 h-7 rounded-full overflow-hidden shrink-0 bg-white">
+                  {blog.authorName === 'PROPABRIDGE TEAM' ? (
+                    <House size={14} weight="regular" className="text-navy" />
+                  ) : (
+                    <Image src={blog.authorImage || '/images/blogs/author.png'} alt={blog.authorName} fill className="object-cover" />
+                  )}
                 </div>
                 <p className="text-[11px] font-bold text-navy tracking-[0.05em] uppercase">
-                  AMINU S. MUHAMMAD
+                  {blog.authorName}
                 </p>
               </div>
             </Link>
@@ -143,18 +251,20 @@ export default function BlogsSection() {
         </div>
 
         {/* ── CTA BUTTON ── */}
-        <div className="mt-16 md:mt-24 flex justify-center">
-          <Link
-            href="/blogs"
-            className="inline-flex items-center justify-center bg-blue hover:bg-blue-hover text-white font-sans font-semibold text-[14px] uppercase tracking-wider px-6 py-3 rounded-btn transition-all duration-300 shadow-[0_4px_14px_rgba(0,106,255,0.3)] gap-2"
-          >
-            READ ALL BLOGS
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="ml-1">
-              <path d="M5 12h14"></path>
-              <path d="M13 5l7 7-7 7"></path>
-            </svg>
-          </Link>
-        </div>
+        {!isPage && (
+          <div className="mt-16 md:mt-24 flex justify-center">
+            <Link
+              href="/blogs"
+              className="inline-flex items-center justify-center bg-blue hover:bg-blue-hover text-white font-sans font-semibold text-[14px] uppercase tracking-wider px-6 py-3 rounded-btn transition-all duration-300 shadow-[0_4px_14px_rgba(0,106,255,0.3)] gap-2"
+            >
+              READ ALL BLOGS
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="ml-1">
+                <path d="M5 12h14"></path>
+                <path d="M13 5l7 7-7 7"></path>
+              </svg>
+            </Link>
+          </div>
+        )}
 
       </div>
     </section>

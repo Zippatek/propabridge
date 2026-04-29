@@ -15,20 +15,20 @@ export default function SubmitPropertyPage() {
       <section className="pt-16 pb-10 px-4 flex flex-col items-center text-center">
 
         {/* Centered pill badge */}
-        <div className="inline-flex items-center gap-2 bg-white/80 border border-[#d0cec4] rounded-full px-4 py-1.5 mb-8">
-          <span className="w-[7px] h-[7px] rounded-[2px] bg-[#001a40] inline-block" />
-          <span className="text-[#001a40] text-[12px] font-bold uppercase tracking-[0.1em]">
+        <div className="inline-flex items-center gap-2.5 bg-[#eae9e0] px-4 py-2 rounded-[8px] mb-8">
+          <span className="w-[8px] h-[8px] rounded-[2px] bg-[#001a40] inline-block" />
+          <span className="text-[#001a40] text-[12px] font-bold font-sans uppercase tracking-[0.08em]">
             Submit Property
           </span>
-          <span className="w-[7px] h-[7px] rounded-[2px] bg-[#001a40] inline-block" />
+          <span className="w-[8px] h-[8px] rounded-[2px] bg-[#001a40] inline-block" />
         </div>
 
         {/* Centered headline */}
         <h1
-          className="text-[#001a40] font-bold leading-[1.2] tracking-[-0.02em] max-w-2xl"
-          style={{ fontSize: 'clamp(30px, 4vw, 52px)' }}
+          className="text-[#001a40] font-medium font-sans leading-[1.15] tracking-[-0.02em] w-full max-w-[800px]"
+          style={{ fontSize: 'clamp(28px, 3.5vw, 46px)' }}
         >
-          Submit Your Property. Reach<br className="hidden sm:block" /> Thousands of Verified Clients.
+          Submit Your Property. Reach<br className="hidden md:block" /> Thousands of Verified Clients.
         </h1>
       </section>
 
