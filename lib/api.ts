@@ -1,5 +1,4 @@
 import { BLOGS } from '@/data/blogs'
-import { MOCK_PROPERTIES } from '@/lib/mock-data'
 import { FALLBACK_PROPERTY_GALLERY } from '@/lib/bucket'
 import { Property } from '@/lib/types'
 
@@ -178,8 +177,8 @@ export async function fetchListings(filters?: {
     const rows = await fetchListingsFromEndpoint('/listings', params)
     return rows
   } catch {
-    // Mock fallback only when the backend is unreachable / errors — not when it returns an empty list.
-    return MOCK_PROPERTIES
+    // Never serve mock property data in production paths.
+    return []
   }
 }
 

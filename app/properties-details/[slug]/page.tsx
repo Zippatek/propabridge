@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { fetchListings } from "@/lib/api";
+import { fetchListing } from "@/lib/api";
 import { PropertyHero } from "@/components/listings/PropertyHero";
 import { PropertySpecsBar } from "@/components/listings/PropertySpecsBar";
 import { PropertyGallery } from "@/components/listings/PropertyGallery";
@@ -13,14 +13,7 @@ interface PageProps {
 export default async function PropertyDetailsPage({ params }: PageProps) {
   const { slug } = await params;
 
-  let property;
-  try {
-    const listings = await fetchListings({ limit: 100 });
-    property = listings.find((p: any) => p.slug === slug || p.id === slug);
-  } catch {
-    notFound();
-  }
-
+  const property = await fetchListing(slug);
   if (!property) notFound();
 
   return (
