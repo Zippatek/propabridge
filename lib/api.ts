@@ -1,4 +1,6 @@
 import { BLOGS } from '@/data/blogs'
+import { MOCK_PROPERTIES } from '@/lib/mock-data'
+import { FALLBACK_PROPERTY_GALLERY } from '@/lib/bucket'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
@@ -48,7 +50,9 @@ function mapListing(p: Record<string, unknown>) {
     beds: parseInt(String(p.bedrooms || '')) || undefined,
     baths: parseInt(String(p.bathrooms || '')) || undefined,
     area: (p.size_sqm as number) || undefined,
-    images: Array.isArray(p.images) ? (p.images as string[]) : [],
+    images: Array.isArray(p.images) && (p.images as string[]).length > 0
+      ? (p.images as string[])
+      : FALLBACK_PROPERTY_GALLERY.slice(0, 3),
     verified: Boolean(p.verified),
     verificationStatus: p.verified ? 'VERIFIED' : 'PENDING',
     verificationItems: [],
@@ -100,9 +104,10 @@ export async function fetchListings(filters?: {
     if (!res.ok) throw new Error('Failed to fetch listings');
     const json = await res.json();
     const raw = json.data || json.listings || json || [];
-    return Array.isArray(raw) ? raw.map(mapListing) : [];
+    const mapped = Array.isArray(raw) ? raw.map(mapListing) : [];
+    return mapped.length ? mapped : MOCK_PROPERTIES;
   } catch {
-    return [];
+    return MOCK_PROPERTIES;
   }
 }
 
