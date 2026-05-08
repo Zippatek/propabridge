@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import HoverCursorWrapper from "@/components/ui/HoverCursorWrapper";
+import { HERO_IMAGES } from "@/lib/bucket";
 
 const cards = [
   {
@@ -8,7 +9,7 @@ const cards = [
     description: "Find out what your property is actually worth — backed by real market data and expert analysis",
     cta: "GET VALUATION",
     href: "/sell",
-    image: "https://storage.googleapis.com/propabridge-listings-us/properties/mixed-residential-estate-—-the-promenade-estate-lokogoma-abuja/047dc1f48f8d.webp",
+    image: HERO_IMAGES.contactBuy,
   },
   {
     title: "List your property with us",

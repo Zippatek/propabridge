@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { HERO_IMAGES } from "@/lib/bucket";
 
 export const AboutProblem = () => {
   return (
@@ -10,7 +11,7 @@ export const AboutProblem = () => {
         
         <div className="relative w-full max-w-5xl aspect-video md:aspect-[21/9] rounded-[24px] overflow-hidden">
           <Image 
-            src="https://storage.googleapis.com/propabridge-listings-us/properties/mixed-residential-estate-—-brick-city-valley-kubwa–zuba-expressway-abuja/0725388b301e.webp"
+            src={HERO_IMAGES.aboutProblem}
             alt="Frustrated man looking at laptop"
             fill
             className="object-cover object-center"

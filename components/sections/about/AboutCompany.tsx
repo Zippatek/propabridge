@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { HERO_IMAGES } from "@/lib/bucket";
 
 export const AboutCompany = () => {
   return (
@@ -19,7 +20,7 @@ export const AboutCompany = () => {
           </h2>
           <div className="relative w-full aspect-video rounded-[24px] overflow-hidden">
             <Image 
-              src="https://storage.googleapis.com/propabridge-listings-us/properties/mixed-use-residential-retail-—-the-hills-residences-guzape-district-abuja/0241bd77b2a8.webp"
+              src={HERO_IMAGES.aboutCompany}
               alt="Team discussing blueprints"
               fill
               className="object-cover object-center"

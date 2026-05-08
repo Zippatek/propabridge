@@ -62,31 +62,12 @@ export const NEIGHBORHOOD_COVERS: Record<string, string> = {
  * Used by mock-data when wiring sample property cards.
  */
 export const PROPERTY_GALLERY: Record<string, string[]> = {
-  'gudu-apo-duplex': [
-    bucketUrl('properties/exquisite-4-bedroom-fully-detached-duplex-with-basement-gudu–apo/03962f4fb8d2.webp'),
-    bucketUrl('properties/exquisite-4-bedroom-fully-detached-duplex-with-basement-gudu–apo/2a0186d7bafd.webp'),
-    bucketUrl('properties/exquisite-4-bedroom-fully-detached-duplex-with-basement-gudu–apo/6563596f401f.webp'),
-  ],
-  'maitama-duplex': [
-    bucketUrl('properties/executive-4-bedroom-semi-detached-duplex-with-guest-chalet-maitama/19ba2e8705a7.webp'),
-    bucketUrl('properties/executive-4-bedroom-semi-detached-duplex-with-guest-chalet-maitama/9d11784a41e0.webp'),
-  ],
-  'asokoro-villa': [
-    bucketUrl('properties/stunning-5-bedroom-smart-villa-on-julius-nyerere-crescent-asokoro/4de1cd4a4697.webp'),
-    bucketUrl('properties/stunning-5-bedroom-smart-villa-on-julius-nyerere-crescent-asokoro/852c2b8a5c7f.webp'),
-  ],
-  'guzape-residences': [
-    bucketUrl('properties/mixed-use-residential-retail-—-the-hills-residences-guzape-district-abuja/0241bd77b2a8.webp'),
-    bucketUrl('properties/mixed-use-residential-retail-—-the-hills-residences-guzape-district-abuja/05b358f92308.webp'),
-  ],
-  'lokogoma-promenade': [
-    bucketUrl('properties/mixed-residential-estate-—-the-promenade-estate-lokogoma-abuja/047dc1f48f8d.webp'),
-    bucketUrl('properties/mixed-residential-estate-—-the-promenade-estate-lokogoma-abuja/1a4b2eb91793.webp'),
-  ],
-  'kubwa-brick-city': [
-    bucketUrl('properties/mixed-residential-estate-—-brick-city-spring-jibi-district-kubwa-abuja/3b554af1636a.webp'),
-    bucketUrl('properties/mixed-residential-estate-—-brick-city-spring-jibi-district-kubwa-abuja/4d3a63940307.webp'),
-  ],
+  'gudu-apo-duplex': [],
+  'maitama-duplex': [],
+  'asokoro-villa': [],
+  'guzape-residences': [],
+  'lokogoma-promenade': [],
+  'kubwa-brick-city': [],
   'kaduna-millenium': [
     bucketUrl('properties/millenium-city-kaduna-babban-saura/1b787d3f61d9.webp'),
     bucketUrl('properties/millenium-city-kaduna-babban-saura/568b029da47d.webp'),
@@ -108,12 +89,16 @@ export const PROPERTY_GALLERY: Record<string, string[]> = {
 /** Hero / marketing background images sourced from real property bucket assets. */
 export const HERO_IMAGES = {
   homeHero: bucketUrl('properties/luxury-residential-estate-—-heritage-heights-asokoro-abuja/0a55747c0639.webp'),
-  aboutHero: bucketUrl('properties/stunning-5-bedroom-smart-villa-on-julius-nyerere-crescent-asokoro/4de1cd4a4697.webp'),
-  aboutCompany: bucketUrl('properties/mixed-use-residential-retail-—-the-hills-residences-guzape-district-abuja/0241bd77b2a8.webp'),
-  aboutProblem: bucketUrl('properties/mixed-residential-estate-—-brick-city-valley-kubwa–zuba-expressway-abuja/0725388b301e.webp'),
-  sellHero: bucketUrl('properties/executive-4-bedroom-semi-detached-duplex-with-guest-chalet-maitama/19ba2e8705a7.webp'),
+  aboutHero: bucketUrl('properties/luxury-residential-estate-—-heritage-heights-asokoro-abuja/0a55747c0639.webp'),
+  aboutCompany: bucketUrl(
+    'properties/luxury-residential-estate-—-heritage-heights-asokoro-abuja/411190295027.webp',
+  ),
+  aboutProblem: bucketUrl(
+    'properties/luxury-residential-estate-—-heritage-heights-asokoro-abuja/1cf787ab082d.webp',
+  ),
+  sellHero: bucketUrl('properties/luxury-residential-estate-—-heritage-heights-asokoro-abuja/0a55747c0639.webp'),
   sellingProcess: bucketUrl('properties/luxury-residential-estate-—-heritage-heights-asokoro-abuja/1cf787ab082d.webp'),
-  contactBuy: bucketUrl('properties/mixed-residential-estate-—-the-promenade-estate-lokogoma-abuja/047dc1f48f8d.webp'),
+  contactBuy: bucketUrl('properties/luxury-residential-estate-—-heritage-heights-asokoro-abuja/0a55747c0639.webp'),
   contactRent: bucketUrl('properties/well-finished-4-bedroom-terrace-duplex-with-self-contained-bq/00325858fb27.webp'),
   contactInvest: bucketUrl('properties/millenium-city-kaduna-babban-saura/1b787d3f61d9.webp'),
   // Two propabridge-team headshots used as partner photos in WhySellWithUs etc.

@@ -1,12 +1,14 @@
 import Image from "next/image";
 
+import { HERO_IMAGES } from "@/lib/bucket";
+
 export const AboutHero = () => {
   return (
     <section className="relative w-full h-screen min-h-[600px] flex flex-col justify-center items-center overflow-hidden -mt-[84px] pt-[84px]">
       {/* Background Image */}
       <div className="absolute inset-0 w-full h-full z-0">
         <Image 
-          src="https://storage.googleapis.com/propabridge-listings-us/properties/stunning-5-bedroom-smart-villa-on-julius-nyerere-crescent-asokoro/4de1cd4a4697.webp"
+          src={HERO_IMAGES.aboutHero}
           alt="Propabridge team background"
           fill
           className="object-cover object-center blur-md scale-105"
