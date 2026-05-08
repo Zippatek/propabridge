@@ -1,4 +1,6 @@
 import { BLOGS } from '@/data/blogs'
+import { Property, PropertyCity } from './types'
+
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
@@ -33,18 +35,19 @@ export type FrontendBlog = {
 }
 
 // Maps backend DB fields → frontend Property type
-function mapListing(p: Record<string, unknown>) {
+function mapListing(p: Record<string, any>): Property {
   return {
-    id: (p.property_id as string) || (p.id as string),
-    slug: (p.slug as string) || (p.property_id as string),
-    title: (p.title as string) || '',
-    location: (p.location as string) || '',
-    district: (p.neighbourhood as string) || '',
-    city: (p.city as string) || 'Abuja',
+    id: String(p.property_id || p.id || ''),
+    property_id: p.property_id ? String(p.property_id) : undefined,
+    slug: String(p.slug || p.property_id || p.id || ''),
+    title: String(p.title || ''),
+    location: String(p.location || ''),
+    district: String(p.neighbourhood || p.area || ''),
+    city: (p.city as PropertyCity) || 'Abuja',
     state: 'FCT',
     price: parseFloat(String(p.price || '0').replace(/[^0-9.]/g, '')) || 0,
     status: String(p.transaction_type || '').toUpperCase().includes('RENT') ? 'FOR RENT' : 'FOR SALE',
-    type: (p.category as string) || 'Apartment',
+    type: (p.category as any) || 'Apartment',
     beds: parseInt(String(p.bedrooms || '')) || undefined,
     baths: parseInt(String(p.bathrooms || '')) || undefined,
     area: (p.size_sqm as number) || undefined,
@@ -69,14 +72,14 @@ function normalizeBlogDate(input?: string) {
   return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).toUpperCase()
 }
 
-function mapBlog(blog: Record<string, unknown>): FrontendBlog {
+function mapBlog(blog: Record<string, any>): FrontendBlog {
   return {
-    id: blog.slug || blog.id || blog.blog_id || '',
+    id: String(blog.slug || blog.id || blog.blog_id || ''),
     date: normalizeBlogDate(blog.published_at || blog.date || blog.created_at),
-    category: (blog.category || 'GUIDE').toString().toUpperCase(),
-    title: blog.title || '',
-    image: blog.cover_image || blog.image || '/images/blogs/rent.png',
-    authorName: blog.author_name || blog.authorName || 'PROPABRIDGE TEAM',
+    category: String(blog.category || 'GUIDE').toUpperCase(),
+    title: String(blog.title || ''),
+    image: String(blog.cover_image || blog.image || '/images/blogs/rent.png'),
+    authorName: String(blog.author_name || blog.authorName || 'PROPABRIDGE TEAM'),
     authorImage: blog.author_image || blog.authorImage || undefined,
     content: blog.content_html || blog.content || undefined,
     excerpt: blog.excerpt || blog.summary || undefined,

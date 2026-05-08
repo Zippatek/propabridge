@@ -5,6 +5,8 @@ import { PropertySpecsBar } from "@/components/listings/PropertySpecsBar";
 import { PropertyGallery } from "@/components/listings/PropertyGallery";
 import { PropertyContentLayout } from "@/components/listings/PropertyContentLayout";
 import { RelatedPropertiesCTA } from "@/components/listings/RelatedPropertiesCTA";
+import { Property } from "@/lib/types";
+
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -18,10 +20,10 @@ export default async function PropertyDetailsPage({ params }: PageProps) {
     await new Promise(resolve => setTimeout(resolve, 0));
   }
 
-  let property;
+  let property: Property | undefined;
   try {
-    const listings = await fetchListings({ limit: 100 });
-    property = listings.find((p: any) => p.slug === slug || p.id === slug);
+    const listings = await fetchListings({ limit: 100 }) as Property[];
+    property = listings.find((p) => p.slug === slug || p.id === slug);
   } catch {
     notFound();
   }
