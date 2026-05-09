@@ -20,6 +20,8 @@ ARG NEXT_PUBLIC_API_URL=https://api.propabridge.com
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 ARG NEXT_PUBLIC_GCS_BUCKET_BASE
 ENV NEXT_PUBLIC_GCS_BUCKET_BASE=$NEXT_PUBLIC_GCS_BUCKET_BASE
+ARG NEXT_PUBLIC_PROPA_WIDGET_URL=https://propabridge-adk-480235407496.us-central1.run.app/widget.html
+ENV NEXT_PUBLIC_PROPA_WIDGET_URL=$NEXT_PUBLIC_PROPA_WIDGET_URL
 RUN npm run build
 
 # ── runner ──────────────────────────────────────────────────────────

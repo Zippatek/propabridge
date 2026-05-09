@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation'
 import { X, ChevronDown as CaretDown, ChevronRight as CaretRight } from 'lucide-react'
 import { NavLink } from '@/lib/types'
 import { cn } from '@/lib/cn'
+import { dispatchOpenPropaWidget } from '@/lib/propa-widget-event'
 
 const NAV_LINKS: NavLink[] = [
   { label: 'ABOUT', href: '/about' },
@@ -191,13 +192,14 @@ export default function Navbar() {
 
           {/* CTA + Mobile Trigger */}
           <div className="flex flex-1 items-center justify-end gap-3 shrink-0">
-            <Link
-              href="/contact"
+            <button
+              type="button"
               className="btn-cta-strong hidden lg:inline-flex items-center justify-center gap-2 bg-brand-navy text-brand-textWhite px-5 py-2.5 rounded-btn hover:bg-navy-light transition-colors whitespace-nowrap"
+              onClick={() => dispatchOpenPropaWidget()}
             >
               CHAT WITH PROPA
               <span aria-hidden="true">›</span>
-            </Link>
+            </button>
 
             <button
               type="button"
@@ -249,14 +251,17 @@ export default function Navbar() {
 
           {/* Bottom CTA */}
           <div className="w-full pb-8 pt-2 flex justify-center">
-            <Link
-              href="/contact"
-              onClick={() => setMobileOpen(false)}
+            <button
+              type="button"
+              onClick={() => {
+                dispatchOpenPropaWidget()
+                setMobileOpen(false)
+              }}
               className="btn-cta-strong flex items-center justify-center gap-2 bg-brand-navy text-brand-textWhite px-8 py-3.5 rounded-btn hover:bg-navy-light transition-colors"
             >
               CHAT WITH PROPA
               <span aria-hidden="true">›</span>
-            </Link>
+            </button>
           </div>
         </div>
       </header>
