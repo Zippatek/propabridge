@@ -18,7 +18,7 @@ export default function LocationCard({ location }: LocationCardProps) {
     <HoverCursorWrapper>
       <Link
         href={href}
-        className="group block focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue focus-visible:outline-offset-2 rounded-[16px]"
+        className="group block focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue focus-visible:outline-offset-2 rounded-[24px]"
         aria-label={`Browse properties in ${name}, ${city}`}
       >
       {/*
@@ -26,10 +26,10 @@ export default function LocationCard({ location }: LocationCardProps) {
         White/off-white background, rounded outer corners, subtle shadow.
         Image sits inside with its own padding and inner rounded corners.
       */}
-      <div className="bg-white rounded-[16px] p-2 shadow-card">
+      <div className="bg-brand-light-1 rounded-[24px] p-3">
 
         {/* Image — padded inside card, own rounded corners */}
-        <div className="relative overflow-hidden rounded-[12px] w-full" style={{ aspectRatio: '4/3' }}>
+        <div className="relative overflow-hidden rounded-[16px] w-full" style={{ aspectRatio: '4/3' }}>
           <Image
             src={image ?? '/images/locations/placeholder.jpg'}
             alt={`${name}, ${city}`}
@@ -40,24 +40,24 @@ export default function LocationCard({ location }: LocationCardProps) {
         </div>
 
         {/* ── NAME + ARROW ROW — below the image, inside card ── */}
-        <div className="flex items-center justify-between px-2 pt-3 pb-1">
+        <div className="flex items-center justify-between px-2 pt-4 pb-2">
           {/* Location name: ALL CAPS, navy, bold */}
-          <p className="text-[13px] font-bold text-navy uppercase tracking-[0.04em]">
+          <p className="text-xl font-bold text-navy uppercase tracking-tight">
             {name}, {city}
           </p>
 
           {/*
             Arrow button:
-            Default: light grey background, rounded
-            Hover: fills solid dark navy
+            Default: light cream background, rounded
+            Hover: darkens slightly
           */}
           <div
-            className="flex items-center justify-center w-8 h-8 rounded-lg bg-[#ebebeb] group-hover:bg-navy transition-colors duration-200 shrink-0"
+            className="flex items-center justify-center w-10 h-10 rounded-lg bg-white group-hover:bg-gray-100 transition-colors duration-200 shrink-0"
             aria-hidden="true"
           >
             <ChevronRight
-              size={14}
-              className="text-navy group-hover:text-white transition-colors duration-200"
+              size={20}
+              className="text-navy transition-colors duration-200"
             />
           </div>
         </div>

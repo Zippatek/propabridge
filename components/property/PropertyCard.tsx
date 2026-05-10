@@ -6,6 +6,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { MapPin, Bed, Bath, Maximize2, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Property } from '@/lib/types'
+import { cn } from '@/lib/cn'
 import HoverCursorWrapper from '@/components/ui/HoverCursorWrapper'
 
 interface PropertyCardProps {
@@ -17,13 +18,13 @@ function formatNairaFull(amount: number): string {
   return `₦${amount.toLocaleString('en-NG')}`
 }
 
-/** Status accent — curved tag text on listing cards */
-const statusTextColor: Record<string, string> = {
-  'FOR SALE': '#324F07',
-  'FOR RENT': '#006AFF',
-  'OFF-PLAN': '#9E6100',
-  SOLD: '#800000',
-  RESERVED: '#7c3aed',
+/** Sage-pill style: soft fill + dark label, sits on the cream card background */
+const statusPillStyle: Record<string, { bg: string; color: string }> = {
+  'FOR SALE': { bg: '#DCEBC4', color: '#3A5A1A' },
+  'FOR RENT': { bg: '#D7E7FF', color: '#0B3A8A' },
+  'OFF-PLAN': { bg: '#FCE6BF', color: '#7A4A00' },
+  SOLD: { bg: '#E5E7EB', color: '#6B0F0F' },
+  RESERVED: { bg: '#EADCFB', color: '#4C1D95' },
 }
 
 function listingStatusLabel(status: string): string {
@@ -64,7 +65,9 @@ function ImageCarousel({ images, title, priority }: { images: string[]; title: s
     emblaApi?.scrollNext()
   }, [emblaApi])
 
-  if (images.length === 0) return <div className="h-full bg-divider rounded-card" />
+  if (images.length === 0) {
+    return <div className="h-full bg-[#e8e6df]" />
+  }
 
   if (images.length === 1) {
     return (
@@ -146,7 +149,8 @@ export default function PropertyCard({ property, priority = false }: PropertyCar
   const areaDisplay = area !== undefined ? `${area} M²` : null
   const priceDisplay = priceLabel ?? formatNairaFull(price)
   const isAreaOnly = beds === undefined && baths === undefined
-  const badgeColor = statusTextColor[status] ?? '#001A40'
+  const pill =
+    statusPillStyle[status] ?? ({ bg: '#F3F4F6', color: '#001A40' } as const)
 
   const displayImages = images && images.length > 0 ? images.filter(Boolean) : []
 
@@ -154,81 +158,101 @@ export default function PropertyCard({ property, priority = false }: PropertyCar
     <HoverCursorWrapper>
       <Link
         href={`/properties-details/${property.slug}`}
-        className="group relative block rounded-card focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue focus-visible:outline-offset-2"
+        className={cn(
+          'group relative block bg-transparent shadow-none outline-none ring-0',
+          'focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#006aff] focus-visible:outline-offset-2'
+        )}
         aria-label={`View listing: ${title}`}
       >
-        {/* Image wrapper → carousel */}
-        <div className="relative h-[320px] overflow-hidden rounded-card bg-divider">
-          <ImageCarousel images={displayImages} title={title} priority={priority} />
-
-          {/* Status — curved beige tag, top-right (same treatment as previously below title) */}
+        <div className="relative">
+          {/* Floating sage pill */}
           <div
-            className="absolute top-3 right-3 z-10 inline-flex max-w-[min(200px,calc(100%-1.5rem))] items-center bg-brand-light2 pl-3 pr-4 py-2 shadow-md"
-            style={{ borderRadius: '4px 20px 4px 20px' }}
+            className="absolute right-3 top-2 z-20 rounded-full px-4 py-2"
+            style={{ backgroundColor: pill.bg }}
           >
-            <span className="text-[11px] font-semibold tracking-[0.04em]" style={{ color: badgeColor }}>
+            <span
+              className="text-[12px] font-bold uppercase leading-none tracking-[0.06em]"
+              style={{ color: pill.color }}
+            >
               {listingStatusLabel(status)}
             </span>
           </div>
+
+          {/* Photo */}
+          <div className="relative h-[300px] overflow-hidden rounded-[14px] bg-[#e8e6df]">
+            <ImageCarousel images={displayImages} title={title} priority={priority} />
+          </div>
         </div>
 
-        {/* Text block */}
-        <div className="pt-4 pb-1">
-          {/* Location */}
-          <div className="mb-3 flex items-start gap-1.5">
-            <MapPin size={14} className="mt-0.5 shrink-0 text-grey" aria-hidden />
-            <p className="text-body-uppercase font-semibold uppercase leading-tight tracking-normal text-grey">
+        {/* Copy block — spacing aligned to Card A */}
+        <div className="px-4 pb-8 pt-5">
+          <div className="mb-4 flex items-start gap-2">
+            <MapPin
+              size={14}
+              strokeWidth={1.75}
+              className="mt-0.5 shrink-0 text-[#001A40]"
+              aria-hidden
+            />
+            <p className="text-[11px] font-semibold uppercase leading-[1.35] tracking-[0.02em] text-[#4a5568]">
               {location}
             </p>
           </div>
 
-          {/* Summary + price */}
-          <div className="mb-3 flex items-center justify-between gap-2">
-            <div className="flex min-w-0 shrink items-center gap-1.5 text-body-sm text-grey">
+          <div className="mb-4 flex items-baseline justify-between gap-3">
+            <div className="flex min-w-0 flex-wrap items-center gap-x-1.5 gap-y-1 text-[13px] font-medium text-[#4a5568]">
               {isAreaOnly ? (
-                <div className="flex items-center gap-1.5">
-                  <Maximize2 size={16} className="shrink-0 text-grey" aria-hidden />
-                  <span className="font-medium whitespace-nowrap">{areaLabel ?? areaDisplay ?? '—'}</span>
+                <div className="flex items-center gap-1">
+                  <Maximize2 size={15} strokeWidth={1.75} className="shrink-0 text-[#001A40]" aria-hidden />
+                  <span className="whitespace-nowrap">{areaLabel ?? areaDisplay ?? '—'}</span>
                 </div>
               ) : (
                 <>
                   {beds !== undefined && (
                     <>
                       <div className="flex items-center gap-1">
-                        <Bed size={16} className="shrink-0 text-grey" aria-hidden />
-                        <span className="font-medium">{beds}</span>
+                        <Bed size={15} strokeWidth={1.75} className="shrink-0 text-[#001A40]" aria-hidden />
+                        <span>{beds}</span>
                       </div>
-                      <span className="select-none text-[10px] font-bold leading-none text-navy">●</span>
+                      {(baths !== undefined || areaDisplay) && (
+                        <span className="select-none text-[8px] text-[#9aa3b2]" aria-hidden>
+                          •
+                        </span>
+                      )}
                     </>
                   )}
                   {baths !== undefined && (
                     <>
                       <div className="flex items-center gap-1">
-                        <Bath size={16} className="shrink-0 text-grey" aria-hidden />
-                        <span className="font-medium">{baths}</span>
+                        <Bath size={15} strokeWidth={1.75} className="shrink-0 text-[#001A40]" aria-hidden />
+                        <span>{baths}</span>
                       </div>
                       {areaDisplay && (
-                        <span className="select-none text-[10px] font-bold leading-none text-navy">●</span>
+                        <span className="select-none text-[8px] text-[#9aa3b2]" aria-hidden>
+                          •
+                        </span>
                       )}
                     </>
                   )}
                   {areaDisplay && (
                     <div className="flex items-center gap-1">
-                      <Maximize2 size={16} className="shrink-0 text-grey" aria-hidden />
-                      <span className="font-medium whitespace-nowrap">{areaDisplay}</span>
+                      <Maximize2 size={15} strokeWidth={1.75} className="shrink-0 text-[#001A40]" aria-hidden />
+                      <span className="whitespace-nowrap">{areaDisplay}</span>
                     </div>
                   )}
                 </>
               )}
             </div>
 
-            <span className="ml-2 shrink-0 whitespace-nowrap text-h5 font-bold text-navy">{priceDisplay}</span>
+            <span className="shrink-0 whitespace-nowrap text-right text-xl font-bold leading-none tracking-tight text-[#0a0a0a]">
+              {priceDisplay}
+            </span>
           </div>
 
-          <hr className="mb-3 border-t border-grey-light/80" aria-hidden />
+          <hr className="mb-4 border-0 border-t border-solid border-[#e2e8f0]" aria-hidden />
 
-          {/* Title */}
-          <h3 className="text-h3-s line-clamp-2 font-bold leading-snug text-navy">{title}</h3>
+          <h3 className="line-clamp-2 text-[17px] font-bold leading-snug tracking-tight text-[#001A40]">
+            {title}
+          </h3>
         </div>
       </Link>
     </HoverCursorWrapper>
