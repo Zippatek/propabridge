@@ -44,17 +44,21 @@ export const BLOG_COVERS: Record<string, string> = {
 
 /** Cover image per neighborhood slug. */
 export const NEIGHBORHOOD_COVERS: Record<string, string> = {
-  'gwarinpa-abuja': bucketUrl('neighborhoods/gwarinpa-abuja/03434050cef7.webp'),
-  'maitama-abuja': bucketUrl('neighborhoods/maitama-abuja/0eb3ad94ffd7.webp'),
-  'jabi-abuja': bucketUrl('neighborhoods/jabi-abuja/0accbce51e29.webp'),
-  'kubwa-abuja': bucketUrl('neighborhoods/kubwa-abuja/27c888d9e381.webp'),
-  'apo-abuja': bucketUrl('neighborhoods/apo-abuja/1173f69e8b56.webp'),
-  'guzape-abuja': bucketUrl('neighborhoods/guzape-abuja/1f1e16ff5c0c.webp'),
-  'barnawa-kaduna': bucketUrl('neighborhoods/barnawa-kaduna/03c3152802fc.webp'),
-  'kasuwan-bacci-kaduna': bucketUrl('neighborhoods/kasuwan-bacci-kaduna/1ead92d95d6e.webp'),
-  'chanchaga-minna': bucketUrl('neighborhoods/chanchaga-minna/01ce3434cb1f.webp'),
-  'millenium-city': bucketUrl('neighborhoods/millenium-city/1d89c15ac857.webp'),
-  'fountain-view-residences': bucketUrl('neighborhoods/fountain-view-residences/050443cddc6a.webp'),
+  'kasuwan-bacci-kaduna': '/images/neighborhoods/kasuwan-bacci-kaduna.png',
+  'apo-abuja': '/images/neighborhoods/apo-abuja.png',
+  'kubwa-abuja': '/images/neighborhoods/kubwa-abuja.png',
+  'guzape-abuja': '/images/neighborhoods/guzape-abuja.png',
+  'gwarimpa-abuja': '/images/neighborhoods/gwarimpa-abuja.png',
+  'gwarinpa-abuja': '/images/neighborhoods/gwarimpa-abuja.png',
+  'maitama-abuja': '/images/neighborhoods/maitama-abuja.png',
+  'jabi-abuja': '/images/neighborhoods/jabi-abuja.png',
+  'wuse-2-abuja': '/images/neighborhoods/wuse-2-abuja.png',
+  'barnawa-gra-kaduna': '/images/neighborhoods/barnawa-gra-kaduna.png',
+  'barnawa-kaduna': '/images/neighborhoods/barnawa-gra-kaduna.png',
+  'chanchaga-minna': '/images/neighborhoods/chanchaga-minna.png',
+  'millenium-city': '/images/neighborhoods/millenium-city-kaduna.png',
+  'millenium-city-kaduna': '/images/neighborhoods/millenium-city-kaduna.png',
+  'fountain-view-residences': '/images/neighborhoods/fountain-view-residences.png',
 }
 
 /**

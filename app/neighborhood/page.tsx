@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import LocationCard from '@/components/property/LocationCard'
 import { MOCK_LOCATIONS } from '@/lib/mock-data'
 import { fetchNeighborhoods } from '@/lib/api'
+import { NEIGHBORHOOD_COVERS } from '@/lib/bucket'
 import type { Location } from '@/lib/types'
-import { Search } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'Neighborhoods — Propabridge',
@@ -25,6 +25,27 @@ export default async function NeighborhoodPage({
   const params = await searchParams
   const query = (params?.q || '').trim().toLowerCase()
 
+  const slugify = (value: string) =>
+    value
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+
+  const resolveNeighborhoodCover = (slug?: string, name?: string, city?: string, fallback?: string) => {
+    const candidates = [
+      slug || '',
+      [name, city].filter(Boolean).join('-'),
+      name || '',
+    ]
+      .map(slugify)
+      .filter(Boolean)
+
+    for (const key of candidates) {
+      if (NEIGHBORHOOD_COVERS[key]) return NEIGHBORHOOD_COVERS[key]
+    }
+    return fallback || ''
+  }
+
   const apiNeighborhoods = await fetchNeighborhoods()
   const all: Location[] =
     apiNeighborhoods.length > 0
@@ -34,7 +55,7 @@ export default async function NeighborhoodPage({
           district: n.name,
           city: n.city,
           state: n.state,
-          image: n.coverImage,
+          image: resolveNeighborhoodCover(n.slug || n.id, n.name, n.city, n.coverImage),
           propertyCount: n.listingCount ?? 0,
           description: n.description ?? '',
         }))
