@@ -7,7 +7,7 @@ import { PUBLIC_API_URL } from '@/lib/env-public'
 
 const API_URL = PUBLIC_API_URL
 
-const DEFAULT_TIMEOUT_MS = 12000
+const DEFAULT_TIMEOUT_MS = 3000
 
 // Wrapper around fetch that aborts after `timeoutMs` so server-rendered pages
 // never hang waiting on an unreachable backend.
@@ -321,7 +321,7 @@ export async function createBlog(payload: {
   image?: string
   authorName?: string
 }) {
-  const res = await fetch(`${API_URL}/blogs`, {
+  const res = await fetchWithTimeout(`${API_URL}/blogs`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -431,11 +431,11 @@ export async function fetchNeighborhood(slug: string): Promise<FrontendNeighborh
 }
 
 export async function subscribeNewsletter(email: string) {
-  const res = await fetch(`${API_URL}/newsletter/subscribe`, {
+  const res = await fetchWithTimeout(`${API_URL}/newsletter/subscribe`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email }),
-  })
+  }, 5000)
   if (!res.ok) {
     const json = await res.json().catch(() => ({}))
     throw new Error(json.error || 'Subscription failed')
@@ -451,7 +451,7 @@ export async function submitLead(data: {
   property_id?: string;
   message?: string;
 }) {
-  const res = await fetch(`${API_URL}/leads`, {
+  const res = await fetchWithTimeout(`${API_URL}/leads`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
