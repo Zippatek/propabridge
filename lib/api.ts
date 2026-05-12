@@ -155,6 +155,7 @@ function mapListing(p: Record<string, unknown>) {
     bodyParagraphs: bodyParagraphs && bodyParagraphs.length > 0 ? bodyParagraphs : undefined,
     createdAt: (p.created_at as string) || new Date().toISOString(),
     updatedAt: (p.updated_at as string) || new Date().toISOString(),
+    yearBuilt: (p.year_built as number | string | undefined) ?? undefined,
   }
 }
 

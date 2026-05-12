@@ -21,8 +21,9 @@ interface PropertySpecsBarProps {
 }
 
 export function PropertySpecsBar({ property }: PropertySpecsBarProps) {
-  // Built in date (default to 2024 for this phase)
-  const builtIn = "2024";
+  // Built in year — read from listing data (year_built). Fall back to "—" when missing
+  // rather than a fake default so admins can see whether the field is set.
+  const builtIn = property.yearBuilt ? String(property.yearBuilt) : "—";
 
   // Define specs based on property type
   const isLand = property.type === "Land";

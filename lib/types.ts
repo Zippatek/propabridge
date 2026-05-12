@@ -70,6 +70,7 @@ export interface Property {
   developer?: Developer
   createdAt: string
   updatedAt: string
+  yearBuilt?: number | string
 
   // SEO
   metaTitle?: string
