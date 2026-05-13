@@ -42,7 +42,7 @@ export default async function RecentListings() {
         <div className="flex justify-center mt-8">
           <Link
             href="/listings"
-            className="btn-cream-pill"
+            className="btn-navy-pill"
           >
             VIEW PROPERTIES
             <span className="text-[18px] leading-none">›</span>

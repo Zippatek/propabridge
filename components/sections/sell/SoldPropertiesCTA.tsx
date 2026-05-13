@@ -28,7 +28,7 @@ export default function SoldPropertiesCTA() {
         <div className="flex justify-center">
           <Link
             href="/listings"
-            className="btn-cream-pill"
+            className="btn-navy-pill"
           >
             VIEW ALL PROPERTIES
             <span aria-hidden="true">›</span>

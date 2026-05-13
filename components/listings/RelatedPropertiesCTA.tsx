@@ -54,20 +54,23 @@ export async function RelatedPropertiesCTA({ property }: Props) {
         </h2>
       </div>
 
-      {/* Use existing PropertyCard — same card as the main listings page */}
+      {/* Property cards — existing PropertyCard component */}
       {related.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
           {related.map((p) => (
             <PropertyCard key={p.id} property={p} />
           ))}
         </div>
       ) : (
-        <div className="flex justify-center">
-          <Link href="/listings" className="btn-cream-pill">
-            VIEW ALL PROPERTIES <span aria-hidden="true">›</span>
-          </Link>
-        </div>
+        <div className="mb-12" />
       )}
+
+      {/* VIEW PROPERTIES — always shown at the bottom */}
+      <div className="flex justify-center">
+        <Link href="/listings" className="btn-navy-pill">
+          VIEW PROPERTIES <span aria-hidden="true">›</span>
+        </Link>
+      </div>
     </section>
   );
 }

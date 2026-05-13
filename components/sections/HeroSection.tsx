@@ -195,7 +195,7 @@ export default function HeroSection() {
 
         <Link
           href="/listings"
-          className="btn-cta-strong inline-flex items-center gap-2 rounded-lg bg-brand-textWhite px-8 py-3.5 text-brand-textBlack transition-colors duration-200 hover:bg-brand-light1"
+          className="btn-navy-pill"
         >
           VIEW PROPERTIES
           <span className="text-para-m leading-none">›</span>

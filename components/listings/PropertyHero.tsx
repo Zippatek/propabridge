@@ -27,20 +27,17 @@ export function PropertyHero({ property }: PropertyHeroProps) {
     return () => cancelAnimationFrame(raf)
   }, [])
 
-  // Door close as hero scrolls away + parallax
+  // Door close + parallax as hero scrolls away
   useEffect(() => {
     const section = sectionRef.current
     if (!section) return
-
     const onScroll = () => {
       const rect = section.getBoundingClientRect()
       const scrolledPast = Math.max(-rect.top, 0)
       const scrollRatio = Math.min(scrolledPast / (rect.height || 1), 1)
-      // Re-zoom 1.0 → 1.05 as the hero scrolls out (door closes)
       setImageScale(1.0 + scrollRatio * 0.05)
       setTranslateY(Math.min(scrolledPast * 0.25, 80))
     }
-
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     window.addEventListener('resize', onScroll)
@@ -58,13 +55,13 @@ export function PropertyHero({ property }: PropertyHeroProps) {
     <section
       ref={sectionRef}
       className="relative w-full overflow-hidden"
-      // 88vh so the specs bar is always below the fold on desktop — user must scroll to see it
-      style={{ height: '88vh', minHeight: 600, marginTop: '-84px' }}
+      // 99vh — specs bar always below the fold on desktop
+      style={{ height: '99vh', minHeight: 600, marginTop: '-84px' }}
       aria-labelledby="property-hero-heading"
     >
-      {/* ── Image layer: door-open scale + parallax ── */}
+      {/* ── Image: door-open scale + parallax ── */}
       <div
-        className="absolute inset-0 z-0 bg-[#1a1a24]"
+        className="absolute inset-0 z-0 bg-[#d0cfc5]"
         style={{
           opacity: mounted ? 1 : 0,
           transform: `scale(${imageScale}) translateY(${translateY}px)`,
@@ -82,54 +79,65 @@ export function PropertyHero({ property }: PropertyHeroProps) {
             fill
             priority
             sizes="100vw"
-            // Slightly dimmed so the gradient + white text reads crisply
-            className="object-cover object-center brightness-[0.65]"
+            className="object-cover object-center"
           />
         )}
       </div>
 
-      {/* ── Dark gradient — covers bottom 55% so title sits on solid contrast ── */}
-      {/*    Top of gradient is transparent; bottom is near-opaque dark             */}
+      {/* ── Beige gradient — fades from brand beige at bottom to transparent ── */}
+      {/*    Image stays fully clear in the top ~45%; bottom half transitions      */}
       <div
         className="pointer-events-none absolute inset-0 z-[1]"
         style={{
           background:
-            'linear-gradient(to top, rgba(10,14,28,0.96) 0%, rgba(10,14,28,0.82) 22%, rgba(10,14,28,0.45) 42%, rgba(10,14,28,0.1) 62%, transparent 78%)',
+            'linear-gradient(to top, #f4f3ea 0%, rgba(244,243,234,0.92) 18%, rgba(244,243,234,0.55) 34%, rgba(244,243,234,0.15) 50%, transparent 65%)',
         }}
       />
 
-      {/* ── Content: pinned to bottom — title + location link ── */}
-      <div className="relative z-10 h-full flex flex-col justify-end pb-14 px-4 sm:px-8 lg:px-12 max-w-6xl mx-auto w-full">
+      {/* ── Content: centered, pinned to bottom ── */}
+      <div className="relative z-10 h-full flex flex-col items-center justify-end pb-16 px-4 text-center">
+
         <h1
           id="property-hero-heading"
-          className="font-bold text-white max-w-4xl mb-4"
+          className="max-w-4xl mb-4"
           style={{
             fontSize: 'clamp(26px, 4.5vw, 54px)',
+            fontWeight: 500,           // reduced weight — was 700
             lineHeight: 1.08,
-            letterSpacing: '-0.025em',
-            textShadow: '0 2px 16px rgba(0,0,0,0.4)',
+            letterSpacing: '-0.022em',
+            color: '#001a40',
           }}
         >
           {property.title}
         </h1>
 
+        {/* Location link — dotted underline, centered */}
         {mapsHref ? (
           <a
             href={mapsHref}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-white/80 hover:text-white font-medium transition-colors text-[14px] group w-fit"
+            className="inline-flex items-center gap-1.5 text-[#4a5568] hover:text-[#006aff] font-medium transition-colors text-[14px] group"
             title="Open in Google Maps"
           >
-            <MapPin size={16} className="text-white/70 group-hover:text-[#ffc870] transition-colors flex-shrink-0" />
-            <span className="group-hover:underline underline-offset-2">{property.location}</span>
-            <span className="text-[11px] font-semibold text-[#ffc870] opacity-0 group-hover:opacity-100 transition-opacity ml-0.5">
+            <MapPin size={15} className="text-[#001a40] group-hover:text-[#006aff] transition-colors flex-shrink-0" />
+            <span
+              style={{
+                textDecoration: 'underline',
+                textDecorationStyle: 'dotted',
+                textDecorationColor: 'rgba(74,85,104,0.5)',
+                textUnderlineOffset: '4px',
+              }}
+            >
+              {property.location}
+            </span>
+            <span className="text-[11px] font-semibold text-[#006aff] opacity-0 group-hover:opacity-100 transition-opacity">
               → Maps
             </span>
           </a>
         ) : property.location ? (
-          <div className="flex items-center gap-2 text-white/80 font-medium text-[14px]">
-            <MapPin size={16} className="text-white/70" />
+          <div className="flex items-center gap-1.5 text-[#4a5568] font-medium text-[14px]">
+            <MapPin size={15} className="text-[#001a40]" />
             <span>{property.location}</span>
           </div>
         ) : null}
