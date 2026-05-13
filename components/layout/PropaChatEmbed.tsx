@@ -65,6 +65,21 @@ export default function PropaChatEmbed() {
     return () => window.removeEventListener('message', onMessage)
   }, [widgetUrl])
 
+  // Forward property context injected by PropertyInquiryCard → iframe
+  useEffect(() => {
+    const onContext = (e: Event) => {
+      const { context } = (e as CustomEvent).detail || {}
+      if (!context) return
+      const win = iframeRef.current?.contentWindow
+      if (!win) return
+      try {
+        win.postMessage({ type: 'propa-chat-context', context }, '*')
+      } catch { /* ignore */ }
+    }
+    window.addEventListener('propa-chat-context', onContext)
+    return () => window.removeEventListener('propa-chat-context', onContext)
+  }, [])
+
   const onIframeLoad = useCallback(() => {
     if (!pendingOpenRef.current) return
     notifyIframeOpen()

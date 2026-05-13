@@ -24,7 +24,7 @@ export default async function PropertyDetailsPage({ params }: PageProps) {
       </div>
       <PropertyGallery property={property} />
       <PropertyContentLayout property={property} />
-      <RelatedPropertiesCTA />
+      <RelatedPropertiesCTA property={property} />
     </main>
   );
 }

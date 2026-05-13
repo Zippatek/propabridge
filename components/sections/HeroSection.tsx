@@ -98,7 +98,7 @@ export default function HeroSection() {
           - Blur (lower/general near bottom over grid region)
           - Pattern (grid)
       */}
-      {/* 0 — Background Wrapper: APPEAR effect + SCROLL SPEED (30%) */}
+      {/* 0 — Background Wrapper: door-open scroll effect (image scales in on entry, scales back out on exit) */}
       <div
         className="absolute inset-0 z-0 bg-brand-navy"
         aria-hidden

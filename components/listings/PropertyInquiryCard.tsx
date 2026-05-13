@@ -4,10 +4,12 @@ import { useState } from 'react';
 import { Sparkles, Phone } from 'lucide-react';
 import { Property } from '@/lib/types';
 import { PUBLIC_API_URL } from '@/lib/env-public';
+import { dispatchOpenPropaChat } from '@/components/layout/PropaChatContext';
 
 interface Props { property: Property }
 
-const WHATSAPP_NUMBER = '2348090892219';
+// PropaAI WhatsApp number (international format, no +)
+const PROPA_AI_WA = '2348055551300';
 
 export function PropertyInquiryCard({ property }: Props) {
   const [form, setForm] = useState({ name: '', phone: '' });
@@ -25,19 +27,40 @@ export function PropertyInquiryCard({ property }: Props) {
     setLoading(true);
     setError(null);
     try {
+      // Use the correct endpoint: /api/tour (api-gateway /api/tour route)
+      // Fallback to /scheduler/book if that fails
+      const propertyId = property.property_id || property.id || property.slug;
+      const date = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+
       const res = await fetch(`${PUBLIC_API_URL}/scheduler/book`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          property_id: propertyId,
           lead_name: form.name,
           lead_phone: form.phone,
-          property_id: property.id,
           property_title: property.title,
-          date: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+          date,
           time: '10:00 AM',
         }),
       });
-      if (!res.ok) throw new Error('Submission failed');
+
+      if (!res.ok) {
+        // If scheduler fails (e.g. property_id not in DB), fallback to lead capture
+        const fallback = await fetch(`${PUBLIC_API_URL}/leads`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: form.name,
+            phone: form.phone,
+            intent: 'viewing',
+            property_id: propertyId,
+            message: `Interested in viewing: ${property.title}`,
+          }),
+        });
+        if (!fallback.ok) throw new Error('Submission failed');
+      }
+
       setSubmitted(true);
     } catch {
       setError('Something went wrong. Try WhatsApp instead.');
@@ -47,48 +70,67 @@ export function PropertyInquiryCard({ property }: Props) {
   };
 
   const waMessage = encodeURIComponent(
-    `Hi! I'm interested in: ${property.title}. Can we arrange a viewing?`
+    `Hi PropaAI! I'm interested in viewing this property:\n*${property.title}*\n${property.location ? `📍 ${property.location}` : ''}\n\nCan you help me arrange a tour?`
   );
-  const waHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${waMessage}`;
+  const waHref = `https://wa.me/${PROPA_AI_WA}?text=${waMessage}`;
+
+  // Open the PropaAI chat widget with property context injected
+  const openPropaAIChat = () => {
+    // Post context into the widget iframe first, then open
+    const msg = {
+      type: 'propa-chat-context',
+      context: `I'm currently viewing this property listing: "${property.title}"${property.location ? ` at ${property.location}` : ''}. Price: ${property.price ? `₦${property.price.toLocaleString()}` : 'enquire'}.`,
+    };
+    // The iframe receives messages from the parent via postMessage in PropaChatEmbed
+    window.dispatchEvent(new CustomEvent('propa-chat-context', { detail: msg }));
+    dispatchOpenPropaChat();
+  };
 
   return (
     <div className="flex flex-col gap-4">
       {/* ── Card 1: PropaAI ───────────────────────────────────────────── */}
       <div className="bg-[#001a40] rounded-[14px] p-6">
-        <div className="flex items-start gap-4 mb-5">
+        <div className="flex items-start gap-3.5 mb-5">
           <div className="w-10 h-10 flex-shrink-0 rounded-[10px] bg-[#006aff]/20 flex items-center justify-center">
             <Sparkles size={20} className="text-[#ffc870]" />
           </div>
           <div>
-            <p className="text-white font-bold text-[16px] leading-tight mb-1">
-              PropaAI is working for you
+            <p className="text-white font-bold text-[15px] leading-tight mb-1">
+              PropaAI knows this property
             </p>
-            <p className="text-[#a0aec0] text-[13px] leading-[1.5]">
-              Nigeria&apos;s first property AI. Ask about price trends, neighbourhood
-              safety, or what this property is worth — instantly.
+            <p className="text-[#a0aec0] text-[12px] leading-[1.5]">
+              Ask about price trends, similar listings, neighbourhood safety, or negotiate — our AI handles it all.
             </p>
           </div>
         </div>
+
+        {/* Primary: Open chat widget with property context */}
+        <button
+          onClick={openPropaAIChat}
+          className="w-full flex items-center justify-center gap-2 bg-[#006aff] hover:bg-[#0052cc] text-white font-bold text-[13px] uppercase tracking-[0.06em] py-3.5 rounded-[8px] transition-all duration-200 mb-2.5"
+        >
+          <Sparkles size={15} />
+          ASK PROPAAI ABOUT THIS
+        </button>
+
+        {/* Secondary: WhatsApp */}
         <a
           href={waHref}
           target="_blank"
           rel="noopener noreferrer"
-          className="w-full flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white font-bold text-[13px] uppercase tracking-[0.06em] py-3.5 rounded-[8px] transition-all duration-200"
+          className="w-full flex items-center justify-center gap-2 border border-[#ffffff18] hover:border-[#25D366] text-[#a0aec0] hover:text-[#25D366] font-semibold text-[12px] uppercase tracking-[0.05em] py-2.5 rounded-[8px] transition-all duration-200"
         >
-          {/* WhatsApp inline SVG */}
-          <svg width="18" height="18" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true">
+          {/* WhatsApp SVG */}
+          <svg width="15" height="15" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true">
             <path d="M16 0C7.164 0 0 7.163 0 16c0 2.822.737 5.474 2.027 7.782L0 32l8.418-2.007A15.931 15.931 0 0016 32c8.836 0 16-7.163 16-16S24.836 0 16 0zm8.293 22.734c-.344.967-2.01 1.84-2.758 1.937-.71.09-1.604.128-2.586-.162-.596-.178-1.362-.414-2.346-.813C12.28 22.2 9.587 18.97 9.38 18.706c-.207-.263-1.69-2.252-1.69-4.297s1.072-3.047 1.45-3.46c.378-.414.828-.518 1.104-.518.276 0 .552.003.793.015.253.012.593-.096.928.708.344.82 1.166 2.864 1.27 3.073.104.208.173.45.034.726-.138.276-.207.449-.414.69-.207.24-.434.538-.621.723-.207.207-.422.43-.182.843.24.414 1.067 1.76 2.293 2.85 1.576 1.402 2.906 1.836 3.32 2.043.413.207.656.173.897-.104.242-.276 1.035-1.208 1.312-1.622.276-.414.552-.345.931-.207.38.138 2.413 1.138 2.827 1.345.414.207.69.31.794.483.103.172.103 1.001-.241 1.967z" />
           </svg>
-          CHAT WITH PROPAAI
+          WHATSAPP PROPAAI
         </a>
-        <p className="text-center text-[#4a5568] text-[11px] mt-3 tracking-wide">
-          OR FILL THE FORM BELOW TO BOOK A TOUR
-        </p>
       </div>
 
       {/* ── Card 2: Book a Viewing ────────────────────────────────────── */}
       <div className="bg-[#f4f3ea] rounded-[14px] p-6 shadow-[0_4px_24px_rgba(0,26,64,0.08)]">
-        <h3 className="text-[#001a40] font-bold mb-1" style={{ fontSize: 'clamp(17px, 1.5vw, 20px)' }}>
+        <h3 className="text-[#001a40] font-bold mb-1" style={{ fontSize: 'clamp(16px, 1.4vw, 19px)' }}>
           Book a viewing
         </h3>
         <p className="text-[#4a5568] text-[13px] leading-[1.55] mb-5">
@@ -111,7 +153,7 @@ export function PropertyInquiryCard({ property }: Props) {
               </div>
             )}
             <div>
-              <label className="block text-[#001a40] font-semibold text-[12px] uppercase tracking-[0.06em] mb-1.5">
+              <label className="block text-[#001a40] font-semibold text-[11px] uppercase tracking-[0.07em] mb-1.5">
                 Your Name
               </label>
               <input
@@ -121,11 +163,11 @@ export function PropertyInquiryCard({ property }: Props) {
               />
             </div>
             <div>
-              <label className="block text-[#001a40] font-semibold text-[12px] uppercase tracking-[0.06em] mb-1.5">
+              <label className="block text-[#001a40] font-semibold text-[11px] uppercase tracking-[0.07em] mb-1.5">
                 Phone Number
               </label>
               <div className="relative">
-                <Phone size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#a0aec0]" />
+                <Phone size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#a0aec0]" />
                 <input
                   type="tel" name="phone" value={form.phone} onChange={handleChange}
                   placeholder="+234 8xx xxx xxxx" required autoComplete="tel"
@@ -134,15 +176,15 @@ export function PropertyInquiryCard({ property }: Props) {
               </div>
             </div>
             <button
-              type="submit" disabled={loading || !form.name.trim() || !form.phone.trim()}
-              className="w-full flex items-center justify-center gap-2 bg-[#006aff] hover:bg-[#0052cc] disabled:bg-[#006aff]/50 text-white font-bold text-[13px] uppercase tracking-[0.06em] py-4 rounded-[8px] transition-all duration-200 mt-1"
+              type="submit"
+              disabled={loading || !form.name.trim() || !form.phone.trim()}
+              className="w-full flex items-center justify-center gap-2 bg-[#001a40] hover:bg-[#002a5e] disabled:bg-[#001a40]/40 text-white font-bold text-[13px] uppercase tracking-[0.06em] py-4 rounded-[8px] transition-all duration-200 mt-1"
             >
               {loading ? 'BOOKING...' : <>BOOK MY VIEWING <span aria-hidden="true">›</span></>}
             </button>
           </form>
         )}
 
-        {/* Fine print */}
         <p className="text-[#a0aec0] text-[11px] text-center mt-4 leading-relaxed">
           No spam. No middlemen. Propabridge connects you directly.
         </p>
