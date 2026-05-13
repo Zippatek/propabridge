@@ -94,8 +94,16 @@ export function PropertyInquiryCard({ property }: Props) {
       {/* ── Card 1: PropaAI ───────────────────────────────────────────── */}
       <div className="bg-[#001a40] rounded-[14px] p-6">
         <div className="flex items-start gap-3.5 mb-5">
-          <div className="w-10 h-10 flex-shrink-0 rounded-[10px] bg-[#006aff]/20 flex items-center justify-center overflow-hidden">
-            <Image src="/pbblueicon.png" alt="PropaAI" width={28} height={28} className="object-contain" />
+          {/* Gold icon on navy — brand gold gives strong contrast on dark navy */}
+          <div className="w-10 h-10 flex-shrink-0 rounded-[10px] bg-white/10 flex items-center justify-center overflow-hidden">
+            <Image
+              src="/pbblueicon.png"
+              alt="PropaAI"
+              width={26}
+              height={26}
+              className="object-contain"
+              style={{ filter: 'brightness(0) saturate(100%) invert(83%) sepia(55%) saturate(700%) hue-rotate(345deg) brightness(105%)' }}
+            />
           </div>
           <div>
             <p className="text-white font-bold text-[15px] leading-tight mb-1">
@@ -112,7 +120,15 @@ export function PropertyInquiryCard({ property }: Props) {
           onClick={openPropaAIChat}
           className="w-full flex items-center justify-center gap-2 bg-[#006aff] hover:bg-[#0052cc] text-white font-bold text-[13px] uppercase tracking-[0.06em] py-3.5 rounded-[8px] transition-all duration-200 mb-2.5"
         >
-          <Image src="/pbblueicon.png" alt="" width={16} height={16} className="object-contain brightness-[10]" />
+          {/* Pure white on blue button */}
+          <Image
+            src="/pbblueicon.png"
+            alt=""
+            width={16}
+            height={16}
+            className="object-contain"
+            style={{ filter: 'brightness(0) invert(1)' }}
+          />
           ASK PROPAAI ABOUT THIS
         </button>
 
