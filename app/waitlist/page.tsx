@@ -1,39 +1,30 @@
 
-import Image from 'next/image';
 import Link from 'next/link';
 
 const WaitlistPage = () => {
   return (
-    <div className="bg-beige min-h-screen flex items-center justify-center">
-      <div className="max-w-lg w-full bg-white p-8 rounded-lg shadow-lg text-center">
-        <h1 className="text-3xl font-bold text-navy mb-4">Join the Propabridge Waitlist</h1>
-        <p className="text-grey-subtle mb-6">
-          Be the first to know when we launch in your city. Get exclusive access to verified properties and early-bird offers.
+    <div className="min-h-screen flex items-center justify-center bg-[radial-gradient(circle_at_top_left,_rgba(0,106,255,0.14),_transparent_18%),radial-gradient(circle_at_bottom_right,_rgba(0,26,64,0.08),_transparent_26%),#F4F3EA] px-4 py-20">
+      <div className="max-w-xl w-full bg-white/95 border border-navy/10 rounded-[28px] p-10 text-center backdrop-blur-sm">
+        <span className="inline-flex items-center justify-center rounded-full bg-beige px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-navy mb-6">
+          Waitlist
+        </span>
+        <h1 className="text-4xl sm:text-5xl font-black text-navy mb-5 leading-tight">
+          Join the Propabridge Waitlist
+        </h1>
+        <p className="mx-auto max-w-lg text-base sm:text-lg text-grey-subtle mb-8">
+          Be the first to get access to verified locations in Abuja, Kaduna, and Minna.
         </p>
-        <div className="mb-6">
-          <Image
-            src="/images/qr-placeholder.png" // Placeholder for QR code
-            alt="WhatsApp QR Code"
-            width={200}
-            height={200}
-            className="mx-auto"
-          />
-        </div>
-        <Link href="https://chat.whatsapp.com/Fz5aPGbknm14h60aTFaz4q?mode=gi_t" passHref>
-          <a
-            className="inline-block bg-blue-action text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-hover transition-colors"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Join our WhatsApp Group
-          </a>
+        <Link
+          href="https://chat.whatsapp.com/Fz5aPGbknm14h60aTFaz4q?mode=gi_t"
+          className="inline-flex items-center justify-center rounded-[18px] bg-navy px-10 py-4 text-sm font-semibold text-white shadow-card transition duration-200 ease-in-out hover:bg-navy-light hover:-translate-y-0.5"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Join our WhatsApp Group
         </Link>
-        <p className="text-xs text-grey-placeholder mt-4">
-          Scan the QR code or click the link to join.
-        </p>
       </div>
     </div>
-  );
-};
+  )
+}
 
 export default WaitlistPage;
