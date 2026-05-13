@@ -35,6 +35,9 @@ export interface Property {
   images: string[]              // Array of image URLs
   videoUrl?: string
   virtualTourUrl?: string
+  /** Public floor-plan asset (image or PDF); drives Download Plan on the site. */
+  planUrl?: string
+  planFileName?: string
 
   // Verification
   verified: boolean

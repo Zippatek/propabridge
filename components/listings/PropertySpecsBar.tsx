@@ -112,12 +112,30 @@ export function PropertySpecsBar({ property }: PropertySpecsBarProps) {
         </div>
       </div>
 
-      {/* Download Plan Button (Outside the card) */}
+      {/* Download Plan — links to admin-uploaded floor plan when present */}
       <div className="flex justify-center">
-        <button className="inline-flex items-center justify-center bg-[#006aff] hover:bg-[#0052cc] text-white font-semibold text-[14px] uppercase tracking-[0.05em] px-8 py-4 rounded-[8px] transition-all duration-300 gap-2 outline-none focus:outline-none focus:ring-0 border-none">
-          <DownloadSimple size={20} />
-          DOWNLOAD PLAN
-        </button>
+        {property.planUrl ? (
+          <a
+            href={property.planUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            download={property.planFileName || undefined}
+            className="inline-flex items-center justify-center bg-[#006aff] hover:bg-[#0052cc] text-white font-semibold text-[14px] uppercase tracking-[0.05em] px-8 py-4 rounded-[8px] transition-all duration-300 gap-2 outline-none focus:outline-none focus:ring-0 border-none"
+          >
+            <DownloadSimple size={20} />
+            DOWNLOAD PLAN
+          </a>
+        ) : (
+          <button
+            type="button"
+            disabled
+            title="Floor plan not uploaded for this listing yet"
+            className="inline-flex items-center justify-center bg-[#006aff]/40 text-white font-semibold text-[14px] uppercase tracking-[0.05em] px-8 py-4 rounded-[8px] gap-2 outline-none cursor-not-allowed"
+          >
+            <DownloadSimple size={20} />
+            DOWNLOAD PLAN
+          </button>
+        )}
       </div>
     </div>
   );

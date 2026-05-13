@@ -138,6 +138,8 @@ function mapListing(p: Record<string, unknown>) {
     landArea: Number(p.declared_plot_size_sqm ?? p.landArea) || undefined,
     floors: (p.floors as number) || (p.floor_count as number) || undefined,
     images,
+    planUrl: typeof p.plan_url === 'string' && p.plan_url.trim() ? p.plan_url.trim() : undefined,
+    planFileName: typeof p.plan_file_name === 'string' && p.plan_file_name.trim() ? p.plan_file_name.trim() : undefined,
     verified: Boolean(p.verified || (p.verification_status as string) === 'verified'),
     verificationStatus: (p.verification_status as string) === 'verified' || p.verified ? 'VERIFIED' : 'PENDING',
     verificationItems: [],
