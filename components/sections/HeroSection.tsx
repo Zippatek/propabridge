@@ -209,18 +209,19 @@ export default function HeroSection() {
       <div className="relative z-[9] flex min-h-screen w-full flex-col items-center px-6 pb-10 pt-28 text-center hero:justify-center hero:pb-16">
         <h1
           id="hero-heading"
-          className="mb-0 text-center text-[clamp(80px,21vw,232px)] font-bold leading-[0.94] tracking-[-0.065em] text-brand-textWhite hero:mb-8 hero:text-[clamp(98px,16.5vw,260px)]"
-          style={{ fontFamily: 'var(--font-hero, var(--font-inter))', letterSpacing: '-0.03em' }}
+          className="mb-0 w-full text-center font-bold leading-[0.92] text-brand-textWhite hero:mb-8"
+          style={{
+            fontFamily: 'var(--font-hero, var(--font-inter))',
+            fontSize: 'clamp(52px, 14.5vw, 220px)',
+            letterSpacing: '-0.04em',
+            whiteSpace: 'nowrap',
+          }}
         >
-          <Link href="/listings?type=buy" className="text-brand-textWhite transition-colors duration-200 hover:text-brand-gold">
-            buy.{' '}
-          </Link>
-          <Link href="/listings?type=sell" className="text-brand-textWhite transition-colors duration-200 hover:text-brand-gold">
-            sell.{' '}
-          </Link>
-          <Link href="/listings?type=rent" className="text-brand-textWhite transition-colors duration-200 hover:text-brand-gold">
-            rent.
-          </Link>
+          <Link href="/listings?type=buy" className="text-brand-textWhite transition-colors duration-200 hover:text-brand-gold">buy.</Link>
+          {' '}
+          <Link href="/listings?type=sell" className="text-brand-textWhite transition-colors duration-200 hover:text-brand-gold">sell.</Link>
+          {' '}
+          <Link href="/listings?type=rent" className="text-brand-textWhite transition-colors duration-200 hover:text-brand-gold">rent.</Link>
         </h1>
         <div className="h-[30vh] hero:hidden" aria-hidden />
 
