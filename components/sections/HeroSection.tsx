@@ -42,8 +42,8 @@ export default function HeroSection() {
   const [imageVisible, setImageVisible] = useState(false)
   // Subtle scale: image starts zoomed in and pulls back as doors open
   const [imageScale, setImageScale] = useState(1.12)
-  // Blur as hero scrolls away
-  const [blurPx, setBlurPx] = useState(0)
+  // Blur: starts high on mount, clears quickly on scroll
+  const [blurPx, setBlurPx] = useState(14)
 
   // ── Door open sequence on mount ──────────────────────────────────────
   useEffect(() => {
@@ -72,10 +72,9 @@ export default function HeroSection() {
       // 1.0 at top → 0.94 at bottom — feels like walking through an opening door
       setImageScale(Math.max(1.0 - scrollRatio * 0.06, 0.94))
 
-      // Blur starts heavy and clears as user scrolls (image sharpens = door fully open)
-      const progress = Math.min(Math.max(-rect.top / (vh * 0.5), 0), 1)
-      const maxBlur = window.innerWidth < 768 ? 5 : 7
-      setBlurPx(Math.max(0, maxBlur - progress * maxBlur))
+      // Blur clears fast: fully gone after just 25% of the hero height scrolled
+      const progress = Math.min(Math.max(-rect.top / (vh * 0.25), 0), 1)
+      setBlurPx(Math.max(0, 14 - progress * 14))
     }
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
@@ -223,10 +222,11 @@ export default function HeroSection() {
           {' '}
           <Link href="/listings?type=rent" className="text-brand-textWhite transition-colors duration-200 hover:text-brand-gold">rent.</Link>
         </h1>
-        <div className="h-[30vh] hero:hidden" aria-hidden />
+        {/* Push subtitle further from the heading on small screens */}
+        <div className="h-[38vh] hero:hidden" aria-hidden />
 
         {/* Subtitle */}
-        <p className="mx-auto mb-10 max-w-[820px] text-center text-[clamp(28px,8.4vw,40px)] font-medium leading-[1.08] tracking-[-0.03em] text-brand-textWhite hero:mb-12 hero:text-[40px]">
+        <p className="mx-auto mb-10 mt-10 max-w-[820px] text-center text-[clamp(28px,8.4vw,40px)] font-medium leading-[1.08] tracking-[-0.03em] text-brand-textWhite hero:mt-16 hero:mb-12 hero:text-[40px]">
           <span className="block w-full text-center">The Smartest Way to</span>
           <span className="mt-2 inline-flex flex-wrap items-center justify-center gap-x-[0.35em] gap-y-2">
             <HeroChip>Rent,</HeroChip>
