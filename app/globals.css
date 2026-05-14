@@ -4,6 +4,15 @@
 
 @layer base {
   :root {
+    /* ── Display font for hero heading ──────────────────────────────────
+     * Change --font-hero to switch the "buy. sell. rent." typeface:
+     *   var(--font-display)       → Space Grotesk  (inktrapped, curved terminals)
+     *   var(--font-display-alt)   → Bricolage Grotesque  (editorial, expressive)
+     *   var(--font-display-syne)  → Syne  (geometric, bold personality)
+     *   var(--font-inter)         → Inter  (original, clean)
+     */
+    --font-hero: var(--font-display);   /* ← swap this one line to try different fonts */
+
     /* Brand — Framer tokens (surfaces: never pure #ffffff) */
     --brand-cta: #006aff;
     --brand-navy: #001a40;

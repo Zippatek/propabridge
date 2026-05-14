@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { Inter } from 'next/font/google'
+import { Inter, Space_Grotesk, Bricolage_Grotesque, Syne } from 'next/font/google'
 import './globals.css'
 import Navbar from '@/components/layout/Navbar'
 import ConditionalFooter from '@/components/layout/ConditionalFooter'
@@ -13,6 +13,31 @@ const inter = Inter({
   weight: ['300', '400', '500', '600', '700', '800', '900'],
   display: 'swap',
   variable: '--font-inter',
+})
+
+// ── Display fonts for the hero "buy. sell. rent." heading ──────────────
+// Space Grotesk — inktrapped grotesque, curved terminals, close to Realist
+const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  weight: ['500', '700'],
+  display: 'swap',
+  variable: '--font-display',
+})
+
+// Bricolage Grotesque — expressive variable grotesque, strong optical personality
+const bricolage = Bricolage_Grotesque({
+  subsets: ['latin'],
+  weight: ['500', '700', '800'],
+  display: 'swap',
+  variable: '--font-display-alt',
+})
+
+// Syne — geometric editorial, bold personality, distinctive character shapes
+const syne = Syne({
+  subsets: ['latin'],
+  weight: ['500', '700', '800'],
+  display: 'swap',
+  variable: '--font-display-syne',
 })
 
 export const viewport: Viewport = {
@@ -76,7 +101,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable} ${bricolage.variable} ${syne.variable}`}>
       <body className={`${inter.className} antialiased overflow-x-hidden`}>
         <PropaChatProvider widgetUrl={PROPA_WIDGET_URL}>
           <Navbar />

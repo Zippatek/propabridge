@@ -181,6 +181,7 @@ export default function HeroSection() {
         <h1
           id="hero-heading"
           className="mb-0 text-center text-[clamp(80px,21vw,232px)] font-medium leading-[0.94] tracking-[-0.075em] text-brand-textWhite hero:mb-8 hero:text-[clamp(98px,16.5vw,260px)]"
+          style={{ fontFamily: 'var(--font-hero, var(--font-inter))' }}
         >
           <Link href="/listings?type=buy" className="text-brand-textWhite transition-colors duration-200 hover:text-brand-gold">
             buy.
