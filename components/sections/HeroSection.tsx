@@ -41,7 +41,7 @@ export default function HeroSection() {
   // Image reveals slightly after doors start opening
   const [imageVisible, setImageVisible] = useState(false)
   // Subtle scale: image starts zoomed in and pulls back as doors open
-  const [imageScale, setImageScale] = useState(1.12)
+  const [imageScale, setImageScale] = useState(1.28)
   // Blur: starts high on mount, clears quickly on scroll
   const [blurPx, setBlurPx] = useState(14)
 
@@ -222,11 +222,11 @@ export default function HeroSection() {
           {' '}
           <Link href="/listings?type=rent" className="text-brand-textWhite transition-colors duration-200 hover:text-brand-gold">rent.</Link>
         </h1>
-        {/* Push subtitle further from the heading on small screens */}
-        <div className="h-[38vh] hero:hidden" aria-hidden />
+        {/* Push subtitle well below the heading on small screens */}
+        <div className="h-[72vh] hero:hidden" aria-hidden />
 
         {/* Subtitle */}
-        <p className="mx-auto mb-10 mt-10 max-w-[820px] text-center text-[clamp(28px,8.4vw,40px)] font-medium leading-[1.08] tracking-[-0.03em] text-brand-textWhite hero:mt-16 hero:mb-12 hero:text-[40px]">
+        <p className="mx-auto mb-10 mt-20 max-w-[820px] text-center text-[clamp(28px,8.4vw,40px)] font-medium leading-[1.08] tracking-[-0.03em] text-brand-textWhite hero:mt-28 hero:mb-12 hero:text-[40px]">
           <span className="block w-full text-center">The Smartest Way to</span>
           <span className="mt-2 inline-flex flex-wrap items-center justify-center gap-x-[0.35em] gap-y-2">
             <HeroChip>Rent,</HeroChip>
