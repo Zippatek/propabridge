@@ -48,14 +48,23 @@
 
   html {
     scroll-behavior: smooth;
+    /* Momentum-style scroll on iOS — the "new iPhone box" feel */
+    -webkit-overflow-scrolling: touch;
+    /* Prevent jarring bounce at top/bottom */
+    overscroll-behavior-y: none;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* Subpixel text rendering */
+    text-rendering: optimizeLegibility;
   }
 
   body {
- font-family: 'Inter', sans-serif;
- color: #001a40;
- background: #f4f3ea;
+    font-family: 'Inter', sans-serif;
+    color: #001a40;
+    background: #f4f3ea;
+    /* Smooth momentum scroll on the body too */
+    overflow-x: hidden;
+    overscroll-behavior-y: none;
  line-height: 1.5;
 }
 
@@ -573,5 +582,55 @@ p { font-size: 15px; font-weight: 400; color: #4a5568; line-height: 1.6; }
     font-weight: 600;
     letter-spacing: 0.04em;
     line-height: 1.5;
+  }
+}
+
+/* ── Global interaction polish ───────────────────────────────────────── */
+
+/* Smooth all color/opacity/transform transitions on links and buttons */
+a, button {
+  transition-property: color, background-color, border-color, opacity, transform;
+  transition-duration: 180ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Gentle lift on card-like interactive elements */
+a:focus-visible, button:focus-visible {
+  outline: 2px solid #006aff;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ── Scroll-driven section entrance (CSS only, zero JS) ─────────────────
+ * Sections fade + slide up gently as they enter the viewport.
+ * Uses @starting-style / animation-timeline where supported,
+ * with a graceful fallback (no movement) in older browsers.
+ * The animation is short (0.5s) and uses ease-out so it feels
+ * snappy — not slow or theatrical.
+ * ─────────────────────────────────────────────────────────────────────── */
+@supports (animation-timeline: scroll()) {
+  section:not(.hero-section) {
+    animation: sectionReveal linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 18%;
+  }
+
+  @keyframes sectionReveal {
+    from {
+      opacity: 0.3;
+      transform: translateY(22px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+/* Fallback: instant visibility for browsers without scroll-timeline */
+@supports not (animation-timeline: scroll()) {
+  section {
+    opacity: 1;
+    transform: none;
   }
 }
