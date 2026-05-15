@@ -205,7 +205,8 @@ export default function HeroSection() {
       />
 
       {/* ── Hero text content ── */}
-      <div className="relative z-[9] flex min-h-screen w-full flex-col items-center px-6 pb-10 pt-28 text-center hero:justify-center hero:pb-16">
+      {/* z-[25]: above door panels (z-[20]) so h1 is the LCP element and visible immediately */}
+      <div className="relative z-[25] flex min-h-screen w-full flex-col items-center px-6 pb-10 pt-28 text-center hero:justify-center hero:pb-16">
         <h1
           id="hero-heading"
           className="mb-0 w-full text-center font-bold leading-[0.92] text-brand-textWhite hero:mb-8"
