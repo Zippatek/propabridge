@@ -1,8 +1,11 @@
 import { BLOGS } from '@/data/blogs'
-import { Property, PropertyCity } from './types'
+import { pickMarkdownFields } from '@/lib/property-markdown'
+import { Property } from '@/lib/types'
+import { NEIGHBORHOOD_COVERS } from '@/lib/bucket'
 
+import { PUBLIC_API_URL } from '@/lib/env-public'
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+const API_URL = PUBLIC_API_URL
 
 const DEFAULT_TIMEOUT_MS = 15000
 
@@ -34,35 +37,163 @@ export type FrontendBlog = {
   excerpt?: string
 }
 
-// Maps backend DB fields → frontend Property type
-function mapListing(p: Record<string, any>): Property {
+function nonEmptyTrimmedUrls(values: unknown[]): string[] {
+  return values.filter((x): x is string => typeof x === 'string' && x.trim().length > 0).map((s) => s.trim())
+}
+
+/** property_images rows may be URLs or objects with url / image_url. */
+function urlsFromPropertyImages(raw: unknown): string[] {
+  if (!Array.isArray(raw)) return []
+  const out: string[] = []
+  for (const item of raw) {
+    if (typeof item === 'string' && item.trim()) {
+      out.push(item.trim())
+      continue
+    }
+    if (item && typeof item === 'object') {
+      const o = item as Record<string, unknown>
+      const u = o.url ?? o.image_url ?? o.src
+      if (typeof u === 'string' && u.trim()) out.push(u.trim())
+    }
+  }
+  return out
+}
+
+/** Cover first, then remaining URLs deduped in candidate order (cover moved ahead if duplicated). */
+function mergeCoverAndGallery(coverRaw: unknown, orderedCandidates: string[]): string[] {
+  const cover = typeof coverRaw === 'string' && coverRaw.trim() ? coverRaw.trim() : ''
+
+  const seen = new Set<string>()
+  const out: string[] = []
+  const push = (url: string) => {
+    const t = url.trim()
+    if (!t || seen.has(t)) return
+    seen.add(t)
+    out.push(t)
+  }
+  if (cover) push(cover)
+  for (const u of orderedCandidates) push(u)
+  return out
+}
+
+// Maps backend DB fields -> frontend Property type
+function mapListing(p: Record<string, unknown>) {
+  const listingTypeRaw = String(p.listing_type ?? p.type ?? '').trim().toLowerCase()
+  const transactionRaw = String(p.transaction_type ?? p.transactionType ?? '').trim().toUpperCase()
+  const statusRaw = String(p.status ?? p.listing_status ?? '').trim().toUpperCase()
+
+  const normalizedStatus = (() => {
+    if (statusRaw === 'FOR SALE' || statusRaw === 'FOR RENT' || statusRaw === 'SOLD' || statusRaw === 'OFF-PLAN' || statusRaw === 'RESERVED') {
+      return statusRaw
+    }
+    if (listingTypeRaw.includes('rent') || transactionRaw.includes('RENT')) return 'FOR RENT'
+    if (listingTypeRaw.includes('off') || transactionRaw.includes('OFF')) return 'OFF-PLAN'
+    return 'FOR SALE'
+  })()
+
+  const primaryFieldImages = [
+    ...(Array.isArray(p.images) ? nonEmptyTrimmedUrls(p.images as unknown[]) : []),
+    ...(Array.isArray(p.media) ? nonEmptyTrimmedUrls(p.media as unknown[]) : []),
+    ...(Array.isArray(p.gallery) ? nonEmptyTrimmedUrls(p.gallery as unknown[]) : []),
+  ]
+
+  const fromNested = urlsFromPropertyImages(p.property_images)
+  const mergedCandidates = [...primaryFieldImages, ...fromNested]
+
+  const coverField = p.cover_image_url ?? p.coverImage ?? p.cover_image
+  const images = mergeCoverAndGallery(coverField, mergedCandidates)
+
+  const bedrooms = parseInt(String(p.bedrooms ?? p.beds ?? ''), 10)
+  const bathrooms = parseInt(String(p.bathrooms ?? p.baths ?? ''), 10)
+
+  const amenitiesArr: string[] = Array.isArray(p.amenities) ? (p.amenities as string[]) : []
+  const mdFields = pickMarkdownFields(p)
+
+  const descriptionStr = String(
+    p.description ?? p.long_description ?? p.longDescription ?? p.overview ?? p.body ?? '',
+  )
+  const bodyParagraphs = descriptionStr
+    ? descriptionStr.split(/\n\n+/).map((s) => s.trim()).filter(Boolean)
+    : undefined
+
+  const district = String(p.neighbourhood ?? p.neighborhood ?? p.district ?? '')
+  const city = String(p.city ?? 'Abuja')
+  const location = String(p.location ?? p.address ?? [district, city].filter(Boolean).join(', ') ?? '')
+
   return {
-    id: String(p.property_id || p.id || ''),
-    property_id: p.property_id ? String(p.property_id) : undefined,
-    slug: String(p.slug || p.property_id || p.id || ''),
-    title: String(p.title || ''),
-    location: String(p.location || ''),
-    district: String(p.neighbourhood || p.area || ''),
-    city: (p.city as PropertyCity) || 'Abuja',
-    state: 'FCT',
-    price: parseFloat(String(p.price || '0').replace(/[^0-9.]/g, '')) || 0,
-    status: String(p.transaction_type || '').toUpperCase().includes('RENT') ? 'FOR RENT' : 'FOR SALE',
-    type: (p.category as any) || 'Apartment',
-    beds: parseInt(String(p.bedrooms || '')) || undefined,
-    baths: parseInt(String(p.bathrooms || '')) || undefined,
-    area: (p.size_sqm as number) || undefined,
-    images: Array.isArray(p.images) ? (p.images as string[]) : [],
-    verified: Boolean(p.verified),
-    verificationStatus: p.verified ? 'VERIFIED' : 'PENDING',
+    id: String(p.property_id ?? p.id ?? ''),
+    property_id: (p.property_id as string) || undefined,
+    slug: String(p.slug ?? p.property_id ?? p.id ?? ''),
+    title: String(p.title ?? ''),
+    location,
+    district,
+    city: city as Property['city'],
+    state: city.toLowerCase() === 'abuja' ? 'FCT' : city,
+    price: parseFloat(String(p.price ?? p.asking_price_ngn ?? '0').replace(/[^0-9.]/g, '')) || 0,
+    status: normalizedStatus,
+    type: String(p.property_type ?? p.category ?? p.type ?? 'Apartment') as Property['type'],
+    beds: Number.isNaN(bedrooms) ? undefined : bedrooms,
+    baths: Number.isNaN(bathrooms) ? undefined : bathrooms,
+    area: Number(p.size_sqm ?? p.built_up_area_sqm) || undefined,
+    landArea: Number(p.declared_plot_size_sqm ?? p.landArea) || undefined,
+    floors: (p.floors as number) || (p.floor_count as number) || undefined,
+    images,
+    planUrl: typeof p.plan_url === 'string' && p.plan_url.trim() ? p.plan_url.trim() : undefined,
+    planFileName: typeof p.plan_file_name === 'string' && p.plan_file_name.trim() ? p.plan_file_name.trim() : undefined,
+    verified: Boolean(p.verified || (p.verification_status as string) === 'verified'),
+    verificationStatus: (p.verification_status as string) === 'verified' || p.verified ? 'VERIFIED' : 'PENDING',
     verificationItems: [],
     titleDocumentAvailable: false,
     featured: Boolean(p.featured),
-    amenities: Array.isArray(p.amenities) ? (p.amenities as string[]) : [],
-    fullDescription: (p.description as string) || undefined,
-    shortDescription: p.description ? `${String(p.description).substring(0, 150)}...` : undefined,
+    amenities: amenitiesArr,
+    amenityTags: amenitiesArr.length > 0 ? amenitiesArr : undefined,
+    condition: (p.condition as string) || undefined,
+    water: (p.water_supply as string) || undefined,
+    fullDescription: descriptionStr || undefined,
+    descriptionMarkdown: mdFields.descriptionMarkdown,
+    overviewMarkdown: mdFields.overviewMarkdown,
+    specsMarkdown: mdFields.specsMarkdown,
+    shortDescription: descriptionStr ? `${descriptionStr.substring(0, 150)}...` : undefined,
+    bodyParagraphs: bodyParagraphs && bodyParagraphs.length > 0 ? bodyParagraphs : undefined,
     createdAt: (p.created_at as string) || new Date().toISOString(),
     updatedAt: (p.updated_at as string) || new Date().toISOString(),
-  };
+    yearBuilt: (p.year_built as number | string | undefined) ?? undefined,
+  }
+}
+
+function extractRawListings(payload: unknown): unknown[] {
+  if (Array.isArray(payload)) return payload
+  if (!payload || typeof payload !== 'object') return []
+
+  const root = payload as Record<string, unknown>
+  const data = root.data
+
+  if (Array.isArray(data)) return data
+  if (Array.isArray(root.listings)) return root.listings as unknown[]
+  if (Array.isArray(root.results)) return root.results as unknown[]
+  if (Array.isArray(root.items)) return root.items as unknown[]
+
+  if (data && typeof data === 'object') {
+    const dataObj = data as Record<string, unknown>
+    if (Array.isArray(dataObj.listings)) return dataObj.listings as unknown[]
+    if (Array.isArray(dataObj.items)) return dataObj.items as unknown[]
+    if (Array.isArray(dataObj.results)) return dataObj.results as unknown[]
+  }
+
+  return []
+}
+
+async function fetchListingsFromEndpoint(path: string, params: URLSearchParams): Promise<Property[]> {
+  const query = params.toString()
+  const url = `${API_URL}${path}${query ? `?${query}` : ''}`
+  const res = await fetchWithTimeout(url, { cache: 'no-store' })
+  if (!res.ok) {
+    throw new Error(`Failed to fetch listings from ${path}`)
+  }
+
+  const json = await res.json()
+  const raw = extractRawListings(json)
+  return raw.map((item) => mapListing(item as Record<string, unknown>))
 }
 
 function normalizeBlogDate(input?: string) {
@@ -91,21 +222,49 @@ export async function fetchListings(filters?: {
   type?: string;
   limit?: number;
 }) {
-  const params = new URLSearchParams();
-  if (filters?.status && filters.status !== 'ALL') params.set('status', filters.status);
-  if (filters?.type && filters.type !== 'ALL') params.set('category', filters.type);
-  if (filters?.limit) params.set('limit', filters.limit.toString());
-
   try {
-    const res = await fetchWithTimeout(`${API_URL}/listings?${params.toString()}`, {
-      cache: 'no-store',
-    });
-    if (!res.ok) throw new Error('Failed to fetch listings');
-    const json = await res.json();
-    const raw = json.data || json.listings || json || [];
-    return Array.isArray(raw) ? raw.map(mapListing) : [];
+    // Pull from the same canonical source table path as admin listings.
+    // We intentionally avoid backend-side status/category filters here because
+    // those legacy mappings can hide valid properties that admin still shows.
+    const sourceLimit = Math.max(filters?.limit ?? 50, 200)
+    const rows = await fetchListingsFromEndpoint('/listings', new URLSearchParams({ limit: String(sourceLimit) }))
+
+    const normalizedStatus = filters?.status?.trim().toUpperCase()
+    const normalizedType = filters?.type?.trim().toUpperCase()
+
+    const statusFiltered =
+      normalizedStatus && normalizedStatus !== 'ALL'
+        ? rows.filter((row) => row.status.toUpperCase() === normalizedStatus)
+        : rows
+
+    const typeFiltered =
+      normalizedType && normalizedType !== 'ALL'
+        ? statusFiltered.filter((row) => {
+            const rowType = String(row.type || '').trim().toUpperCase()
+            if (rowType === normalizedType) return true
+            // Keep current UX labels working even when backend taxonomy differs.
+            if (normalizedType === 'LUXURY HOMES') {
+              const title = row.title.toUpperCase()
+              return title.includes('LUXURY') || title.includes('PREMIUM') || title.includes('MANSION')
+            }
+            if (normalizedType === 'SINGLE FAMILY HOME') {
+              return ['DETACHED', 'SEMI-DETACHED', 'DUPLEX', 'VILLA', 'HOUSE'].includes(rowType)
+            }
+            if (normalizedType === 'OFFICE SPACE') {
+              return rowType === 'OFFICE' || row.title.toUpperCase().includes('OFFICE')
+            }
+            if (normalizedType === 'RETAIL SHOP') {
+              return rowType === 'SHOP' || rowType === 'COMMERCIAL'
+            }
+            return false
+          })
+        : statusFiltered
+
+    const finalLimit = filters?.limit ?? typeFiltered.length
+    return typeFiltered.slice(0, finalLimit)
   } catch {
-    return [];
+    // Never serve mock property data in production paths.
+    return []
   }
 }
 
@@ -185,7 +344,7 @@ export async function createBlog(payload: {
   image?: string
   authorName?: string
 }) {
-  const res = await fetch(`${API_URL}/blogs`, {
+  const res = await fetchWithTimeout(`${API_URL}/blogs`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -210,6 +369,7 @@ export type FrontendNeighborhood = {
   city: string
   state: string
   coverImage: string
+  gallery?: string[]
   description?: string
   safetyScore?: number
   averagePrice?: number
@@ -223,13 +383,39 @@ export type FrontendNeighborhood = {
 function mapNeighborhood(n: Record<string, unknown>): FrontendNeighborhood {
   const slug = (n.slug as string) || (n.id as string) || ''
   const name = (n.name as string) || ''
+  
+  let coverImage = (n.coverImage as string) || (n.cover_image as string) || ''
+  let galleryRaw = Array.isArray(n.gallery) ? n.gallery : (Array.isArray(n.images) ? n.images : [])
+  let gallery = galleryRaw.filter((g): g is string => typeof g === 'string' && g.trim().length > 0 && !g.includes('googleapis.com'))
+
+  if (!coverImage || coverImage.includes('googleapis.com')) {
+    const slugify = (str: string) => str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
+    const candidates = [
+      slug || '',
+      [name, n.city as string].filter(Boolean).join('-'),
+      name || '',
+    ].map(slugify).filter(Boolean)
+
+    for (const key of candidates) {
+      if (NEIGHBORHOOD_COVERS[key]) {
+        coverImage = NEIGHBORHOOD_COVERS[key]
+        break
+      }
+    }
+  }
+  
+  if (gallery.length === 0 && coverImage && !coverImage.includes('googleapis.com')) {
+    gallery = [coverImage]
+  }
+
   return {
     id: (n.id as string) || slug,
     slug,
     name,
     city: (n.city as string) || '',
     state: (n.city as string) === 'Abuja' ? 'FCT' : ((n.state as string) || ''),
-    coverImage: (n.coverImage as string) || (n.cover_image as string) || '',
+    coverImage: coverImage,
+    gallery,
     description: (n.description as string) || undefined,
     safetyScore: typeof n.safetyScore === 'number' ? (n.safetyScore as number) : (n.safety_score as number | undefined),
     averagePrice: typeof n.averagePrice === 'number' ? (n.averagePrice as number) : (n.average_price as number | undefined),
@@ -268,11 +454,11 @@ export async function fetchNeighborhood(slug: string): Promise<FrontendNeighborh
 }
 
 export async function subscribeNewsletter(email: string) {
-  const res = await fetch(`${API_URL}/newsletter/subscribe`, {
+  const res = await fetchWithTimeout(`${API_URL}/newsletter/subscribe`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email }),
-  })
+  }, 5000)
   if (!res.ok) {
     const json = await res.json().catch(() => ({}))
     throw new Error(json.error || 'Subscription failed')
@@ -288,7 +474,7 @@ export async function submitLead(data: {
   property_id?: string;
   message?: string;
 }) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/leads`, {
+  const res = await fetchWithTimeout(`${API_URL}/leads`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({

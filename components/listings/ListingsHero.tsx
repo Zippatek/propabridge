@@ -43,12 +43,12 @@ export default function ListingsHero({ activeStatus, onStatusChange }: ListingsH
 
       {/* Heading */}
       <h1 className="relative z-10 text-display-xl text-heading font-medium max-w-[980px] mb-12">
-        Find a place to live, work, or dream big — all in one beautiful map of possibilities.
+        Find a place to live, work, or dream big —<br />all in one beautiful map<br /> of possibilities.
       </h1>
 
       {/* Search Bar */}
       <div className="relative z-10 w-full max-w-[1280px] mb-8 mx-auto px-0 md:px-0 lg:px-0">
-        <div className="relative flex items-center w-full h-[64px] bg-[#fcfdf8] rounded-[16px] shadow-[0_4px_24px_rgba(0,0,0,0.04)] px-6">
+        <div className="relative flex items-center w-full h-[64px] bg-brand-light1 rounded-[16px] shadow-[0_4px_24px_rgba(0,0,0,0.04)] px-6">
           <MagnifyingGlass size={20} color="#6B7280" className="mr-3" />
           <input
             type="text"
@@ -72,8 +72,8 @@ export default function ListingsHero({ activeStatus, onStatusChange }: ListingsH
               className={cn(
                 "flex items-center gap-2 px-5 py-2.5 rounded-[12px] text-[13px] font-bold tracking-[0.05em] uppercase transition-colors",
                 isActive
-                  ? "bg-navy text-white shadow-md"
-                  : "bg-[#E5E7EB] text-navy hover:bg-[#D1D5DB]"
+                  ? "bg-navy text-brand-textWhite shadow-md"
+                  : "bg-beige text-navy hover:bg-[#e9e7d9]"
               )}
             >
               <Icon size={16} />

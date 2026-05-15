@@ -1,0 +1,44 @@
+substitutions:
+  _REGION: us-central1
+  _SERVICE_NAME: propabridge-web
+  _AR_REPO: propabridge-web
+  _NEXT_PUBLIC_API_URL: https://api.propabridge.com
+  # Manual `gcloud builds submit` leaves COMMIT_SHA empty — always set a tag:
+  _TAG: latest
+
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - --build-arg=NEXT_PUBLIC_API_URL=${_NEXT_PUBLIC_API_URL}
+      - -t
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/propabridge-web:${_TAG}
+      - .
+
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/propabridge-web:${_TAG}
+
+  - name: gcr.io/cloud-builders/gcloud
+    args:
+      - run
+      - deploy
+      - ${_SERVICE_NAME}
+      - --image
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/propabridge-web:${_TAG}
+      - --region
+      - ${_REGION}
+      - --platform
+      - managed
+      - --allow-unauthenticated
+      - --max-instances
+      - '20'
+      - --min-instances
+      - '0'
+
+images:
+  - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/propabridge-web:${_TAG}
+
+options:
+  logging: CLOUD_LOGGING_ONLY

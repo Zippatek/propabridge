@@ -4,20 +4,39 @@
 
 @layer base {
   :root {
-    /* Brand colors — per design guideline v2.0 */
-    --color-navy: #001a40;
+    /* ── Display font for hero "buy. sell. rent." heading ───────────────
+     * Swap --font-hero to preview each typeface (one line change):
+     *   var(--font-display)       → Nunito Sans   (rounded terminals — closest to Circular/Realist)
+     *   var(--font-display-alt)   → DM Sans        (soft humanist, modern real-estate feel)
+     *   var(--font-display-syne)  → Outfit         (geometric, slightly rounded, Proxima Nova-ish)
+     *   var(--font-inter)         → Inter           (original, clean)
+     */
+    --font-hero: var(--font-display);   /* ← change this one line to switch fonts */
+
+    /* Brand — Framer tokens (surfaces: never pure #ffffff) */
+    --brand-cta: #006aff;
+    --brand-navy: #001a40;
+    --brand-light-1: #fffff2;
+    --brand-light-2: #f4f3ea;
+    --brand-text-white: #fff8ed;
+    --brand-text-black: #21201b;
+    --brand-light-green: #dff1c4;
+    --brand-gold: #ffc870;
+    --brand-red: #ff8585;
+    --brand-dark-green: #324f07;
+    --brand-dark-brown: #9e6100;
+    --brand-dark-red: #800000;
+    /* Legacy aliases */
+    --color-navy: var(--brand-navy);
     --color-navy-light: #002a5e;
-    --color-blue: #006aff;
+    --color-blue: var(--brand-cta);
     --color-blue-hover: #0052cc;
-    /* Electric Blue hover — buttons */
-    --color-gold: #ffc870;
+    --color-gold: var(--brand-gold);
     --color-gold-hover: #f5c842;
-    /* Gold hover — hero buy/sell/rent links */
-    --color-beige: #f4f3ea;
+    --color-beige: var(--brand-light-2);
     --color-grey: #4a5568;
     --color-divider: #cbd5e0;
-    --color-verified: #1a7a4a;
-    /* Transition standard — 200ms ease-in-out for all interactions */
+    --color-verified: var(--brand-dark-green);
     --transition: 200ms ease-in-out;
   }
 
@@ -28,105 +47,38 @@
   }
 
   html {
+    scroll-behavior: smooth;
+    /* Momentum-style scroll on iOS — the "new iPhone box" feel */
+    -webkit-overflow-scrolling: touch;
+    /* Prevent jarring bounce at top/bottom */
+    overscroll-behavior-y: none;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* Subpixel text rendering */
+    text-rendering: optimizeLegibility;
   }
 
   body {
-    /* Foundation: body 15 / 400 / navy base / line-height 1.5 */
-    font-family: var(--font-inter), 'Inter Display', 'Inter', system-ui, sans-serif;
-    background-color: #f4f3ea;
+    font-family: 'Inter', sans-serif;
     color: #001a40;
-    font-size: 15px;
-    font-weight: 400;
-    line-height: 1.5;
-    letter-spacing: 0;
-  }
+    background: #f4f3ea;
+    /* Smooth momentum scroll on the body too */
+    overflow-x: hidden;
+    overscroll-behavior-y: none;
+ line-height: 1.5;
+}
 
-  /* Foundation typography */
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    color: #001a40;
-  }
-
-  h1,
-  h2 {
-    letter-spacing: -0.02em;
-  }
-
-  h3,
-  h4,
-  h5,
-  h6 {
-    letter-spacing: -0.01em;
-  }
-
-  /* General text defaults */
-  p,
-  li,
-  td,
-  dd,
-  blockquote {
-    color: #4a5568;
-    line-height: 1.6;
-    letter-spacing: 0;
-  }
-
-  h1 {
-    font-size: 36px;
-    font-weight: 700;
-    line-height: 1.15;
-  }
-
-  h2 {
-    font-size: 28px;
-    font-weight: 700;
-    line-height: 1.2;
-  }
-
-  @media (min-width: 1200px) {
-    h1 {
-      font-size: 40px;
-      letter-spacing: -1.1px;
-      line-height: 110%;
-      margin-bottom: 40px;
-    }
-
-    h2 {
-      font-size: 40px;
-      letter-spacing: -1.1px;
-      line-height: 110%;
-    }
-  }
-
-  h3 {
-    font-size: 22px;
-    font-weight: 600;
-    line-height: 1.3;
-  }
-
-  h4 {
-    font-size: 18px;
-    font-weight: 600;
-    line-height: 1.4;
-  }
-
-  h5,
-  h6 {
-    font-size: 18px;
-    font-weight: 600;
-    line-height: 1.4;
-  }
-
-  p,
-  li,
-  span {
-    text-align: left;
-  }
+/* Base heading sizes — hero/display overrides live in .display-* utilities */
+h1, h2, h3, h4, h5, h6 { color: #303030; }
+h1 { font-size: clamp(28px, 5vw, 48px); font-weight: 700; letter-spacing: -0.025em; line-height: 1.05; }
+h2 { font-size: clamp(22px, 3.5vw, 38px); font-weight: 700; letter-spacing: -0.02em; line-height: 1.08; }
+h3 { font-size: clamp(18px, 2.5vw, 26px); font-weight: 600; line-height: 1.15; }
+h4 { font-size: clamp(16px, 2vw, 20px); font-weight: 600; line-height: 1.2; }
+h5 { font-size: 15px; font-weight: 600; line-height: 1.3; }
+h6 { font-size: 13px; font-weight: 600; line-height: 1.3; }
+p { font-size: 15px; font-weight: 400; color: #4a5568; line-height: 1.6; }
+.caption { font-size: 12px; font-weight: 400; color: #4a5568; }
+.badge-text { font-size: 11px; font-weight: 600; letter-spacing: 0.04em; }
 
   a {
     color: inherit;
@@ -148,12 +100,37 @@
 
 @layer components {
 
+  /* Display / hero headline scale — matches production 72-200px range */
+  .display-hero {
+    font-size: clamp(56px, 10vw, 140px);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 0.95;
+    color: #303030;
+  }
+
+  .display-xl {
+    font-size: clamp(40px, 7vw, 96px);
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    line-height: 0.97;
+    color: #303030;
+  }
+
+  .display-lg {
+    font-size: clamp(32px, 5.5vw, 72px);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.0;
+    color: #303030;
+  }
+
   /* Verified badge glassmorphism */
   .verified-badge {
-    background: rgba(255, 255, 255, 0.85);
+    background: color-mix(in srgb, var(--brand-text-white) 85%, transparent);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.6);
+    border: 1px solid color-mix(in srgb, var(--brand-text-white) 55%, transparent);
     border-radius: 20px;
     box-shadow: 0 2px 12px rgba(0, 26, 64, 0.14);
   }
@@ -173,20 +150,52 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    background: #f4f3ea;
-    color: #303030;
+    background: var(--brand-light-2);
+    color: var(--brand-text-black);
     border-radius: 9999px;
-    padding: 14px 32px;
+    padding: 15px 34px;
     font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.04em;
+    font-weight: 700;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
+    line-height: 1.2;
     transition: background-color 200ms ease, transform 200ms ease;
   }
 
   .btn-cream-pill:hover {
-    background: #ecebe2;
+    background: var(--brand-light-1);
     transform: translateY(-1px);
+  }
+
+  /* Navy pill — used for VIEW PROPERTIES CTAs site-wide */
+  .btn-navy-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--brand-navy);
+    color: var(--brand-text-white);
+    border-radius: 9999px;
+    padding: 15px 34px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    line-height: 1.2;
+    transition: background-color 200ms ease, transform 200ms ease;
+  }
+
+  .btn-navy-pill:hover {
+    background: #002a5e;
+    transform: translateY(-1px);
+  }
+
+  .btn-cta-strong {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    line-height: 1.2;
   }
 
   @media (hover: hover) and (pointer: fine) {
@@ -238,18 +247,40 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
-    letter-spacing: 0.08em;
+    letter-spacing: 0;
     text-transform: uppercase;
-    color: #001a40;
+    line-height: 1.5;
+    color: var(--brand-navy);
     margin-bottom: 16px;
   }
 
   .section-label::before {
     content: '●';
-    color: #006aff;
+    color: var(--brand-cta);
     font-size: 10px;
+  }
+
+  /* Shared FAQ/contact typography tightening */
+  .faq-contact-heading-copy {
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+  }
+
+  .faq-contact-answer-copy {
+    font-weight: 400;
+    line-height: 1.56;
+    letter-spacing: -0.01em;
+  }
+
+  .faq-contact-form-label {
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.55;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
   }
 
   /* 2-line text clamp */
@@ -269,9 +300,8 @@
     overflow: hidden;
   }
 
-  /* Focus rings — Electric Blue */
   :focus-visible {
-    outline: 2px solid #006aff;
+    outline: 2px solid var(--brand-cta);
     outline-offset: 2px;
   }
 
@@ -279,16 +309,16 @@
   .blog-content {
     font-family: 'Inter', 'Plus Jakarta Sans', system-ui, sans-serif;
     font-size: 16px;
-    line-height: 1.55;
-    letter-spacing: -0.01em;
+    line-height: 1.5;
+    letter-spacing: -0.005em;
     color: #2d3748;
   }
 
   .blog-content p {
     margin-bottom: 1.5rem;
     color: #2d3748;
-    line-height: 1.55;
-    letter-spacing: -0.01em;
+    line-height: 1.5;
+    letter-spacing: -0.005em;
   }
 
   .blog-content em {
@@ -303,7 +333,7 @@
     margin-top: 2.5rem;
     margin-bottom: 1rem;
     letter-spacing: -0.01em;
-    line-height: 1.3;
+    line-height: 1.5;
   }
 
   .blog-content ul {
@@ -321,8 +351,8 @@
   .blog-content li {
     margin-bottom: 0.5rem;
     color: #2d3748;
-    line-height: 1.55;
-    letter-spacing: -0.01em;
+    line-height: 1.5;
+    letter-spacing: -0.005em;
   }
 
   .blog-content strong {
@@ -338,14 +368,133 @@
 
 @layer utilities {
 
-  /* Faint watermark text */
   .watermark-text {
     opacity: 0.05;
     user-select: none;
     pointer-events: none;
   }
 
-  /* Typography utilities */
+  /* Framer text styles — use with font-weight utilities as needed */
+  .text-h1-l {
+    font-size: 56px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .text-h1-s {
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
+  .text-h2-l {
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
+  .text-h2-s {
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1.5;
+    letter-spacing: -0.02em;
+  }
+
+  .text-h3-l {
+    font-size: 26px;
+    font-weight: 600;
+    line-height: 1.5;
+    letter-spacing: 0;
+  }
+
+  .text-h3-m {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.5;
+    letter-spacing: 0;
+  }
+
+  .text-h3-s {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.5;
+    letter-spacing: 0;
+  }
+
+  .text-h4 {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.5;
+    letter-spacing: 0;
+  }
+
+  .text-h5 {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.4;
+    letter-spacing: -0.04em;
+  }
+
+  .text-p-xxl {
+    font-size: 80px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -3.7px;
+  }
+
+  .text-para-l {
+    font-size: 18px;
+    line-height: 1.5;
+    letter-spacing: -0.4px;
+  }
+
+  .text-para-m {
+    font-size: 18px;
+    line-height: 1.5;
+    letter-spacing: -0.4px;
+  }
+
+  .text-para-s {
+    font-size: 16px;
+    line-height: 1.4;
+    letter-spacing: -0.03em;
+  }
+
+  .text-para-xs {
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  .text-body-token {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.58;
+    letter-spacing: -0.012em;
+  }
+
+  .text-body-uppercase {
+    font-size: 12px;
+    line-height: 1.5;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+
+  @media (min-width: 1200px) {
+    .text-para-l {
+      font-size: 28px;
+      line-height: 1.5;
+      letter-spacing: -0.8px;
+    }
+
+    .text-body-uppercase {
+      letter-spacing: 0;
+    }
+  }
+
+  /* Legacy aliases */
   .text-display {
     font-size: 48px;
     font-weight: 800;
@@ -354,24 +503,44 @@
   }
 
   .text-h1 {
-    font-size: 36px;
+    font-size: 40px;
     font-weight: 700;
-    line-height: 1.15;
+    line-height: 1.1;
     letter-spacing: -0.02em;
+  }
+
+  @media (min-width: 1200px) {
+    .text-h1 {
+      font-size: 56px;
+      line-height: 1;
+    }
   }
 
   .text-h2 {
-    font-size: 28px;
+    font-size: 30px;
     font-weight: 700;
-    line-height: 1.2;
+    line-height: 1.5;
     letter-spacing: -0.02em;
   }
 
+  @media (min-width: 1200px) {
+    .text-h2 {
+      font-size: 48px;
+      line-height: 1.1;
+    }
+  }
+
   .text-h3 {
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 600;
-    line-height: 1.3;
-    letter-spacing: -0.01em;
+    line-height: 1.5;
+    letter-spacing: 0;
+  }
+
+  @media (min-width: 1200px) {
+    .text-h3 {
+      font-size: 26px;
+    }
   }
 
   .text-body-lg {
@@ -381,15 +550,17 @@
   }
 
   .text-body {
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 400;
-    line-height: 1.6;
+    line-height: 1.58;
+    letter-spacing: -0.012em;
   }
 
   .text-body-sm {
     font-size: 14px;
     font-weight: 400;
-    line-height: 1.5;
+    line-height: 1.58;
+    letter-spacing: -0.012em;
   }
 
   .text-nav {
@@ -399,7 +570,6 @@
     letter-spacing: 0.02em;
   }
 
-  /* Foundation caption + badge-text */
   .caption {
     font-size: 12px;
     font-weight: 400;
@@ -411,6 +581,56 @@
     font-size: 11px;
     font-weight: 600;
     letter-spacing: 0.04em;
-    line-height: 1.3;
+    line-height: 1.5;
+  }
+}
+
+/* ── Global interaction polish ───────────────────────────────────────── */
+
+/* Smooth all color/opacity/transform transitions on links and buttons */
+a, button {
+  transition-property: color, background-color, border-color, opacity, transform;
+  transition-duration: 180ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Gentle lift on card-like interactive elements */
+a:focus-visible, button:focus-visible {
+  outline: 2px solid #006aff;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ── Scroll-driven section entrance (CSS only, zero JS) ─────────────────
+ * Sections fade + slide up gently as they enter the viewport.
+ * Uses @starting-style / animation-timeline where supported,
+ * with a graceful fallback (no movement) in older browsers.
+ * The animation is short (0.5s) and uses ease-out so it feels
+ * snappy — not slow or theatrical.
+ * ─────────────────────────────────────────────────────────────────────── */
+@supports (animation-timeline: scroll()) {
+  section:not(.hero-section) {
+    animation: sectionReveal linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 18%;
+  }
+
+  @keyframes sectionReveal {
+    from {
+      opacity: 0.3;
+      transform: translateY(22px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+/* Fallback: instant visibility for browsers without scroll-timeline */
+@supports not (animation-timeline: scroll()) {
+  section {
+    opacity: 1;
+    transform: none;
   }
 }

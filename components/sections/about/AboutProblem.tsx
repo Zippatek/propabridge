@@ -5,12 +5,12 @@ export const AboutProblem = () => {
     <section className="container-site px-4 md:px-8">
       <div className="flex flex-col gap-12 items-center">
         <h2 className="text-display-lg text-center text-heading font-medium max-w-4xl">
-          Looking for a home? You've probably been here before...
+          Looking for a home? You&apos;ve probably been here before...
         </h2>
         
         <div className="relative w-full max-w-5xl aspect-video md:aspect-[21/9] rounded-[24px] overflow-hidden">
           <Image 
-            src="https://storage.googleapis.com/propabridge-listings-us/properties/mixed-residential-estate-—-brick-city-valley-kubwa–zuba-expressway-abuja/0725388b301e.webp"
+            src="/images/about/about-problem-media.png"
             alt="Frustrated man looking at laptop"
             fill
             className="object-cover object-center"
@@ -35,7 +35,7 @@ export const AboutProblem = () => {
         </div>
 
         <p className="text-center text-[#001a40] text-[16px] md:text-[18px] leading-[1.6] max-w-4xl mx-auto font-medium">
-          We get it — and that's exactly why we built Propabridge. Our mission is to make real estate safe again. We verify the details, guide you with honesty, and keep the process simple — so you can focus on the joy of finding a place that truly feels like home.
+          We get it — and that&apos;s exactly why we built Propabridge. Our mission is to make real estate safe again. We verify the details, guide you with honesty, and keep the process simple — so you can focus on the joy of finding a place that truly feels like home.
         </p>
       </div>
     </section>

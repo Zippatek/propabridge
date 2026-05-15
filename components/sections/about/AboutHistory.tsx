@@ -15,25 +15,25 @@ export const AboutHistory = () => {
       year: "2023",
       title: "The idea sparked",
       description: "We saw the pains of house-hunting in Nigeria—the stress, the fake agents, the wasted money. With a shared dream of transparency, we set out to build a platform that protects seekers and rewards genuine property owners.",
-      image: "https://storage.googleapis.com/propabridge-listings-us/neighborhoods/maitama-abuja/0eb3ad94ffd7.webp",
+      image: "/images/about/history-idea-sparked.png",
     },
     {
       year: "2024",
       title: "The breakthrough",
       description: "We introduced the \"Zero Fees, Zero Fears\" model. By removing registration and viewing fees, we instantly brought trust back to the people.",
-      image: "https://storage.googleapis.com/propabridge-listings-us/properties/luxury-residential-estate-—-heritage-heights-asokoro-abuja/411190295027.webp",
+      image: "/images/about/history-breakthrough.png",
     },
     {
       year: "2025",
       title: "Embracing AI technology",
       description: "We launched \"Propa,\" our intelligent AI assistant, making property matching faster than ever. Clients could now find, filter, and book verified homes from their phones in seconds.",
-      image: "https://storage.googleapis.com/propabridge-listings-us/agents/propabridge-team/2c5cdc267690.webp",
+      image: "/images/about/history-embracing-ai.png",
     },
     {
       year: "2026",
       title: "Still growing, still grounded",
       description: "Today, we continue doing what we love — connecting genuine buyers with genuine sellers. Because for us, every closed deal is more than a transaction; it's a story of trust restored.",
-      image: "https://storage.googleapis.com/propabridge-listings-us/properties/shopping-mall-—-guzape-mall-guzape-district-abuja/26193854795e.webp",
+      image: "/images/about/history-still-growing.png",
     }
   ];
 
@@ -74,7 +74,7 @@ export const AboutHistory = () => {
                 
                 {/* Node and Connector */}
                 <div className="hidden sm:flex absolute left-[-15px] top-[2px] items-center z-20">
-                  <div className="w-8 h-8 rounded-full bg-[#f4f3ea] border-[3px] border-[#001a40] flex items-center justify-center relative shadow-sm shrink-0">
+                  <div className="w-8 h-8 rounded-full bg-[#f4f3ea] border-[3px] border-[#001a40] flex items-center justify-center relative shrink-0">
                     {/* Inner dot */}
                     <motion.div 
                       className="w-3 h-3 rounded-full bg-[#001a40]"
@@ -94,12 +94,12 @@ export const AboutHistory = () => {
                 )}
 
                 {/* Badge */}
-                <div className="inline-block bg-[#001a40] text-white text-[15px] font-bold px-4 py-1.5 rounded-lg mb-4 relative z-20 shadow-sm tracking-wide">
+                <div className="inline-block bg-[#001a40] text-white text-[15px] font-bold px-4 py-1.5 rounded-lg mb-4 relative z-20 tracking-wide">
                   {item.year}
                 </div>
 
                 {/* Card Container */}
-                <div className="bg-[#e8e6d5] rounded-[24px] p-6 lg:p-10 w-full shadow-sm hover:shadow-md transition-shadow relative z-20">
+                <div className="bg-[#e8e6d5] rounded-[24px] p-6 lg:p-10 w-full transition-shadow relative z-20">
                   <h3 className="text-[#001a40] text-[24px] lg:text-[28px] font-medium leading-tight mb-4 truncate">{item.title}</h3>
                   <p className="text-[#001a40]/80 text-[13px] lg:text-[14px] leading-[1.6] mb-6 lg:mb-8 line-clamp-4">
                     {item.description}

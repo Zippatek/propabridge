@@ -1,3 +1,6 @@
+# Build with an explicit API base when needed, e.g.:
+#   docker build --build-arg NEXT_PUBLIC_API_URL=https://staging.example.com .
+# If omitted, production default is baked in so the app does not fall back to localhost.
 FROM node:20-alpine AS base
 
 # ── deps ────────────────────────────────────────────────────────────
@@ -13,10 +16,12 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
-ARG NEXT_PUBLIC_API_URL
+ARG NEXT_PUBLIC_API_URL=https://api.propabridge.com
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 ARG NEXT_PUBLIC_GCS_BUCKET_BASE
 ENV NEXT_PUBLIC_GCS_BUCKET_BASE=$NEXT_PUBLIC_GCS_BUCKET_BASE
+ARG NEXT_PUBLIC_PROPA_WIDGET_URL=https://propabridge-adk-480235407496.us-central1.run.app/widget.html
+ENV NEXT_PUBLIC_PROPA_WIDGET_URL=$NEXT_PUBLIC_PROPA_WIDGET_URL
 RUN npm run build
 
 # ── runner ──────────────────────────────────────────────────────────

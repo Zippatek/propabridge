@@ -77,6 +77,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
               src={blog.image}
               alt={blog.title}
               fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
               className="object-cover"
               priority
             />
@@ -99,7 +100,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
                         <Home size={28} className="text-white" />
                       </div>
                     ) : (
-                      <Image src={blog.authorImage || '/images/blogs/author.png'} alt={blog.authorName} fill className="object-cover" />
+                      <Image src={blog.authorImage || '/images/blogs/author.png'} alt={blog.authorName} fill sizes="48px" className="object-cover" />
                     )}
                   </div>
                   <div>
@@ -129,7 +130,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
                     type="submit"
                     className="w-full h-[48px] bg-navy text-white text-[13px] font-bold tracking-widest uppercase rounded-[8px] hover:bg-navy/90 transition-colors flex items-center justify-center gap-2"
                   >
-                    SUBSCRIBE <span>&gt;</span>
+                    SUBSCRIBE <span>›</span>
                   </button>
                 </form>
               </div>
@@ -174,12 +175,13 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
                     src={b.image}
                     alt={b.title}
                     fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                   />
                   {/* View Hover Badge */}
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
                     <div className="w-[80px] h-[80px] rounded-full bg-navy text-white text-[12px] font-bold tracking-widest flex items-center justify-center shadow-lg transform scale-75 group-hover:scale-100 transition-all duration-300">
-                      VIEW &gt;
+                      VIEW ›
                     </div>
                   </div>
                 </div>
@@ -202,7 +204,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
                     {b.authorName === 'PROPABRIDGE TEAM' ? (
                       <Home size={14} className="text-navy" />
                     ) : (
-                      <Image src={b.authorImage || '/images/blogs/author.png'} alt={b.authorName} fill className="object-cover" />
+                      <Image src={b.authorImage || '/images/blogs/author.png'} alt={b.authorName} fill sizes="48px" className="object-cover" />
                     )}
                   </div>
                   <p className="text-[11px] font-bold text-navy tracking-[0.05em] uppercase">

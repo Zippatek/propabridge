@@ -4,7 +4,7 @@ const offices = [
   {
     city: "Abuja",
     address: "No. 1 T.O.S Benson Street, Utako, Abuja, FCT",
-    phone: "(234) 809 089 2219",
+    phone: "+234 805 555 1300",
     email: "hello@propabridge.com",
     hours: [
       "Monday–Friday: 9:00 AM – 6:00 PM",
@@ -14,7 +14,7 @@ const offices = [
   {
     city: "Kaduna",
     address: null,
-    phone: "(234) 809 089 2219",
+    phone: "+234 805 555 1300",
     email: "kaduna@propabridge.com",
     hours: [
       "Monday–Friday: 9:00 AM – 6:00 PM",
@@ -24,7 +24,7 @@ const offices = [
   {
     city: "Minna",
     address: null,
-    phone: "(234) 809 089 2219",
+    phone: "+234 805 555 1300",
     email: "minna@propabridge.com",
     hours: [
       "Monday–Friday: 9:30 AM – 6:30 PM",

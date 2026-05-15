@@ -21,8 +21,9 @@ interface PropertySpecsBarProps {
 }
 
 export function PropertySpecsBar({ property }: PropertySpecsBarProps) {
-  // Built in date (default to 2024 for this phase)
-  const builtIn = "2024";
+  // Built in year — read from listing data (year_built). Fall back to "—" when missing
+  // rather than a fake default so admins can see whether the field is set.
+  const builtIn = property.yearBuilt ? String(property.yearBuilt) : "—";
 
   // Define specs based on property type
   const isLand = property.type === "Land";
@@ -88,7 +89,7 @@ export function PropertySpecsBar({ property }: PropertySpecsBarProps) {
   return (
     <div className="w-full relative z-20 mx-auto max-w-5xl mt-12 mb-20">
       {/* Specs Card */}
-      <div className="bg-[#faf9f3] rounded-[16px] shadow-card p-8 md:p-12 mb-10">
+      <div className="bg-[#F4F3EA] rounded-[16px] p-8 md:p-12 mb-10">
         <div className={`grid grid-cols-2 sm:grid-cols-3 md:grid-cols-${Math.min(specs.length, 5)} gap-y-10 gap-x-6 text-center`}>
           {specs.map((spec, index) => (
             <div key={index} className="flex flex-col items-center">
@@ -118,12 +119,30 @@ export function PropertySpecsBar({ property }: PropertySpecsBarProps) {
         </div>
       </div>
 
-      {/* Download Plan Button (Outside the card) */}
+      {/* Download Plan — links to admin-uploaded floor plan when present */}
       <div className="flex justify-center">
-        <button className="inline-flex items-center justify-center bg-[#006aff] hover:bg-[#0052cc] text-white font-semibold text-[14px] uppercase tracking-[0.05em] px-8 py-4 rounded-[8px] transition-all duration-300 gap-2 outline-none focus:outline-none focus:ring-0 border-none">
-          <DownloadSimple size={20} />
-          DOWNLOAD PLAN
-        </button>
+        {property.planUrl ? (
+          <a
+            href={property.planUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            download={property.planFileName || undefined}
+            className="inline-flex items-center justify-center bg-[#006aff] hover:bg-[#0052cc] text-white font-semibold text-[14px] uppercase tracking-[0.05em] px-8 py-4 rounded-[8px] transition-all duration-300 gap-2 outline-none focus:outline-none focus:ring-0 border-none"
+          >
+            <DownloadSimple size={20} />
+            DOWNLOAD PLAN
+          </a>
+        ) : (
+          <button
+            type="button"
+            disabled
+            title="Floor plan not uploaded for this listing yet"
+            className="inline-flex items-center justify-center bg-[#006aff]/40 text-white font-semibold text-[14px] uppercase tracking-[0.05em] px-8 py-4 rounded-[8px] gap-2 outline-none cursor-not-allowed"
+          >
+            <DownloadSimple size={20} />
+            DOWNLOAD PLAN
+          </button>
+        )}
       </div>
     </div>
   );

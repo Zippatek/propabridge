@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import LocationCard from '@/components/property/LocationCard'
 import { MOCK_LOCATIONS } from '@/lib/mock-data'
 import { fetchNeighborhoods } from '@/lib/api'
+import { NEIGHBORHOOD_COVERS } from '@/lib/bucket'
 import type { Location } from '@/lib/types'
-import { Search } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'Neighborhoods — Propabridge',
@@ -25,6 +25,27 @@ export default async function NeighborhoodPage({
   const params = await searchParams
   const query = (params?.q || '').trim().toLowerCase()
 
+  const slugify = (value: string) =>
+    value
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+
+  const resolveNeighborhoodCover = (slug?: string, name?: string, city?: string, fallback?: string) => {
+    const candidates = [
+      slug || '',
+      [name, city].filter(Boolean).join('-'),
+      name || '',
+    ]
+      .map(slugify)
+      .filter(Boolean)
+
+    for (const key of candidates) {
+      if (NEIGHBORHOOD_COVERS[key]) return NEIGHBORHOOD_COVERS[key]
+    }
+    return fallback || ''
+  }
+
   const apiNeighborhoods = await fetchNeighborhoods()
   const all: Location[] =
     apiNeighborhoods.length > 0
@@ -34,7 +55,7 @@ export default async function NeighborhoodPage({
           district: n.name,
           city: n.city,
           state: n.state,
-          image: n.coverImage,
+          image: resolveNeighborhoodCover(n.slug || n.id, n.name, n.city, n.coverImage),
           propertyCount: n.listingCount ?? 0,
           description: n.description ?? '',
         }))
@@ -59,27 +80,12 @@ export default async function NeighborhoodPage({
           id="neighborhoods-heading"
           className="text-display-xl text-heading font-medium max-w-4xl mx-auto"
         >
-          Every neighborhood has its rhythm — let&apos;s find the one that fits you best.
+          Every neighborhood has its rhythm —<br />let&apos;s find the one that<br /> fits you best.
         </h1>
 
-        <form action="/neighborhood" className="mt-8 w-full max-w-[560px] mx-auto">
-          <div className="flex items-center bg-white border border-grey-light rounded-btn px-4 py-3 gap-3">
-            <Search size={18} className="text-navy/60 shrink-0" />
-            <input
-              name="q"
-              defaultValue={params?.q || ''}
-              placeholder="Search by neighborhood, city, or district..."
-              className="w-full bg-transparent text-[14px] text-navy placeholder:text-navy/45 outline-none"
-            />
-            <button type="submit" className="bg-navy text-white text-[12px] font-semibold px-4 py-2 rounded-btn">
-              SEARCH
-            </button>
-          </div>
-        </form>
       </section>
 
       <section className="container-site pb-24" aria-label="All neighborhoods">
-        <hr className="border-t border-grey-light mb-10" aria-hidden="true" />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {filteredLocations.map((location) => (
             <LocationCard key={location.id} location={location} />

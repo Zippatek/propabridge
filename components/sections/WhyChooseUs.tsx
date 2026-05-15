@@ -72,10 +72,10 @@ export default function WhyChooseUs() {
         </div>
 
         {/* ── COMPARISON SPLIT CARD ── */}
-        <div className="mx-auto max-w-[1040px] flex flex-col md:flex-row rounded-[24px] overflow-hidden shadow-2xl">
+        <div className="mx-auto max-w-[1040px] flex flex-col md:flex-row rounded-[24px] overflow-hidden">
           
           {/* Left Side: The Old Way (Glassmorphism / Light) */}
-          <div className="flex-1 bg-white/70 backdrop-blur-md p-8 md:p-12 relative z-0">
+          <div className="flex-1 bg-[#FFFFF2] p-8 md:p-12 relative z-0 border-r border-navy/10">
             <h3 className="text-navy font-medium text-[24px] md:text-[28px] mb-8 leading-snug tracking-tight">
               The Old Way (Other Platforms)
             </h3>
@@ -89,7 +89,7 @@ export default function WhyChooseUs() {
                       className="text-navy shrink-0 mt-[1px] opacity-90"
                       aria-hidden="true"
                     />
-                    <span className="text-[15px] font-medium text-navy/90 leading-snug">
+                    <span className="text-[15px] font-medium text-navy/90 leading-[1.3] tracking-[-0.005em]">
                       {item}
                     </span>
                   </div>
@@ -117,7 +117,7 @@ export default function WhyChooseUs() {
                       className="text-white shrink-0 mt-[1px]"
                       aria-hidden="true"
                     />
-                    <span className="text-[15px] font-medium text-white leading-snug">
+                    <span className="text-[15px] font-medium text-white leading-[1.3] tracking-[-0.005em]">
                       {item}
                     </span>
                   </div>

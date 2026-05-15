@@ -2,8 +2,9 @@
 
 import { useState, useRef, useEffect } from 'react';
 import {
-  Home as HouseSimple, Sparkles as Sparkle, Camera, User, ArrowRight, ChevronDown as CaretDown,
+  Home as HouseSimple, Sparkles as Sparkle, Camera, User, ChevronDown as CaretDown,
 } from 'lucide-react';
+import { PUBLIC_API_URL } from '@/lib/env-public';
 
 const PROPERTY_TYPES = [
   'Single-Family Home', 'Condo / Apartment', 'Townhouse', 'Multi-Family Home',
@@ -104,7 +105,7 @@ function CustomDropdown({ options, value, onChange, placeholder }: CustomDropdow
       </button>
 
       {isOpen && (
-        <div className="absolute left-0 right-0 top-full mt-2 z-50 bg-[#eceae0] border border-[#d8d6cc] rounded-[6px] shadow-lg max-h-[250px] overflow-y-auto py-2">
+        <div className="absolute left-0 right-0 top-full mt-2 z-50 bg-[#eceae0] border border-[#d8d6cc] rounded-[6px] max-h-[250px] overflow-y-auto py-2">
           {options.map((opt) => (
             <button
               key={opt.value}
@@ -135,7 +136,7 @@ export function SubmitPropertyForm() {
   const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
   try {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/leads`, {
+    await fetch(`${PUBLIC_API_URL}/leads`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -168,7 +169,7 @@ export function SubmitPropertyForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} noValidate className="bg-white rounded-[12px] p-8 md:p-10 shadow-sm border border-[#eceae0]">
+    <form onSubmit={handleSubmit} noValidate className="bg-white rounded-[12px] p-8 md:p-10 border border-[#eceae0]">
 
       {/* ── SECTION A: Basic Details ──────────────────────────────────── */}
       <div className="mb-8">
@@ -369,7 +370,7 @@ export function SubmitPropertyForm() {
 
         {/* Message */}
         <div>
-          <label className={labelCls}>Messsage</label>
+          <label className={labelCls}>Message</label>
           <textarea
             className={inputCls + ' resize-y min-h-[112px]'}
             placeholder="Write your message here"
@@ -385,7 +386,7 @@ export function SubmitPropertyForm() {
         className="w-full flex items-center justify-center gap-2 bg-[#001a40] hover:bg-[#002a5e] text-white font-bold text-[13px] uppercase tracking-[0.08em] py-4 rounded-[8px] transition-all duration-200"
       >
         SUBMIT FOR REVIEW
-        <ArrowRight size={15} />
+        <span aria-hidden="true">›</span>
       </button>
 
     </form>

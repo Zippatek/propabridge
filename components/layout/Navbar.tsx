@@ -4,10 +4,11 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
-import { Menu as List, X, ChevronDown as CaretDown, ChevronRight as CaretRight, ArrowRight } from 'lucide-react'
+import { X, ChevronDown as CaretDown, ChevronRight as CaretRight } from 'lucide-react'
 import { NavLink } from '@/lib/types'
 import { cn } from '@/lib/cn'
-
+import { usePropaChat } from '@/components/layout/PropaChatContext'
+import { PROPA_WIDGET_URL } from '@/lib/env-public'
 const NAV_LINKS: NavLink[] = [
   { label: 'ABOUT', href: '/about' },
   {
@@ -32,6 +33,7 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
   const pathname = usePathname()
+  const { openChat } = usePropaChat()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 80)
@@ -48,21 +50,23 @@ export default function Navbar() {
   return (
     <>
       {/* Blurred Backdrop */}
-      <div
-        className={cn(
-          "fixed inset-0 z-40 bg-black/40 backdrop-blur-sm transition-opacity duration-300 lg:hidden",
-          mobileOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-        )}
-        onClick={() => setMobileOpen(false)}
-        aria-hidden={!mobileOpen}
-      />
+      {mobileOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-brand-navy/40 backdrop-blur-sm transition-opacity duration-300 lg:hidden"
+          onClick={() => setMobileOpen(false)}
+          aria-hidden="true"
+        />
+      )}
 
       <header
         className={cn(
-          'fixed z-50 bg-white transition-all duration-200 ease-out flex flex-col',
+          'fixed z-50 bg-brand-light1 transition-all duration-200 ease-out flex flex-col',
           'top-4 left-4 right-4 lg:left-8 lg:right-8 xl:w-[calc(100%-4rem)] xl:max-w-[1280px] xl:left-1/2 xl:-translate-x-1/2 rounded-[16px]',
           scrolled && !mobileOpen ? 'shadow-[0_8px_30px_rgba(0,0,0,0.08)]' : 'shadow-sm',
-          mobileOpen ? 'max-h-[850px] overflow-hidden lg:overflow-visible' : 'max-h-[72px] overflow-visible lg:overflow-visible'
+          /* Collapsed mobile: clip menu + bar overflow so invisible links cannot sit over page content */
+          mobileOpen
+            ? 'max-h-[850px] overflow-hidden lg:overflow-visible'
+            : 'max-h-[72px] overflow-hidden lg:overflow-visible'
         )}
         role="banner"
       >
@@ -102,8 +106,8 @@ export default function Navbar() {
                       "flex items-center gap-1 text-[13px] font-bold uppercase tracking-tight transition-colors rounded-btn px-3 py-1.5 whitespace-nowrap",
                       activeDropdown === link.label ? "bg-beige" : "bg-transparent",
                       (pathname?.startsWith('/listings') || pathname?.startsWith('/properties-details')) && link.label === 'LISTINGS'
-                        ? "text-blue"
-                        : "text-navy hover:text-[#6b7280]"
+                        ? "bg-beige text-navy"
+                        : "text-navy hover:bg-beige hover:text-[#6b7280]"
                     )}
                     aria-haspopup="true"
                     aria-expanded={activeDropdown === link.label}
@@ -113,7 +117,7 @@ export default function Navbar() {
                   </Link>
                   {activeDropdown === link.label && link.label === 'LISTINGS' && (
                     <div
-                      className="fixed top-[92px] left-4 right-4 lg:left-8 lg:right-8 xl:w-[calc(100%-4rem)] xl:max-w-[1280px] xl:left-1/2 xl:-translate-x-1/2 bg-[#001a40] rounded-[16px] shadow-[0_20px_40px_rgba(0,0,0,0.4)] p-6 z-50 flex gap-6 cursor-default before:absolute before:-top-8 before:left-0 before:w-full before:h-8 before:bg-transparent"
+                      className="fixed top-[92px] left-4 right-4 lg:left-8 lg:right-8 xl:w-[calc(100%-4rem)] xl:max-w-[1280px] xl:left-1/2 xl:-translate-x-1/2 bg-brand-navy rounded-[16px] shadow-[0_20px_40px_rgba(0,0,0,0.4)] p-6 z-50 flex gap-6 cursor-default before:absolute before:-top-8 before:left-0 before:w-full before:h-8 before:bg-transparent"
                       onMouseEnter={() => setActiveDropdown(link.label)}
                       onMouseLeave={() => setActiveDropdown(null)}
                       onClick={(e) => e.stopPropagation()}
@@ -121,11 +125,11 @@ export default function Navbar() {
                       {/* Column 1 */}
                       <Link href="/listings" className="flex-1 flex flex-col group/col cursor-pointer" onClick={() => setActiveDropdown(null)}>
                         <div className="relative w-full aspect-[16/7] rounded-[12px] overflow-hidden mb-4">
-                          <Image src="/images/menu/house_in_field.png" alt="All Properties" fill className="object-cover transition-transform duration-500 group-hover/col:scale-105" />
+                          <Image src="/images/menu/all-properties.webp" alt="All Properties" fill sizes="(max-width: 1024px) 100vw, 33vw" className="object-cover transition-transform duration-500 group-hover/col:scale-105" />
                         </div>
-                        <h3 className="text-white font-semibold text-[18px] mb-1.5 transition-colors">All Properties</h3>
-                        <p className="text-white/70 text-[14px] leading-snug mb-4 flex-grow">Browse everything we&apos;ve verified and uploaded, from self-contains to luxury homes.</p>
-                        <div className="text-white font-semibold text-[13px] uppercase tracking-wider flex items-center gap-1 group-hover/col:gap-2 transition-all mt-auto">
+                        <h3 className="text-brand-textWhite font-semibold text-h3-m mb-1.5 transition-colors">All Properties</h3>
+                        <p className="text-brand-textWhite/70 text-body leading-snug mb-4 flex-grow">Browse everything we&apos;ve verified and uploaded, from self-contains to luxury homes.</p>
+                        <div className="text-brand-textWhite font-semibold text-nav uppercase tracking-wider flex items-center gap-1 group-hover/col:gap-2 transition-all mt-auto">
                           SEE ALL LISTINGS <CaretRight size={12} />
                         </div>
                       </Link>
@@ -133,11 +137,11 @@ export default function Navbar() {
                       {/* Column 2 */}
                       <Link href="/neighborhood" className="flex-1 flex flex-col group/col cursor-pointer" onClick={() => setActiveDropdown(null)}>
                         <div className="relative w-full aspect-[16/7] rounded-[12px] overflow-hidden mb-4">
-                          <Image src="/images/menu/rainy_city_street.png" alt="Neighborhoods" fill className="object-cover transition-transform duration-500 group-hover/col:scale-105" />
+                          <Image src="/images/menu/neighborhoods.webp" alt="Neighborhoods" fill sizes="(max-width: 1024px) 100vw, 33vw" className="object-cover transition-transform duration-500 group-hover/col:scale-105" />
                         </div>
-                        <h3 className="text-white font-semibold text-[18px] mb-1.5 transition-colors">Neighborhoods</h3>
-                        <p className="text-white/70 text-[14px] leading-snug mb-4 flex-grow">Discover local communities, lifestyle perks, and what makes each area special.</p>
-                        <div className="text-white font-semibold text-[13px] uppercase tracking-wider flex items-center gap-1 group-hover/col:gap-2 transition-all mt-auto">
+                        <h3 className="text-brand-textWhite font-semibold text-h3-m mb-1.5 transition-colors">Neighborhoods</h3>
+                        <p className="text-brand-textWhite/70 text-body leading-snug mb-4 flex-grow">Discover local communities, lifestyle perks, and what makes each area special.</p>
+                        <div className="text-brand-textWhite font-semibold text-nav uppercase tracking-wider flex items-center gap-1 group-hover/col:gap-2 transition-all mt-auto">
                           EXPLORE AREAS <CaretRight size={12} />
                         </div>
                       </Link>
@@ -145,11 +149,11 @@ export default function Navbar() {
                       {/* Column 3 */}
                       <Link href="/listings?type=all" className="flex-1 flex flex-col group/col cursor-pointer" onClick={() => setActiveDropdown(null)}>
                         <div className="relative w-full aspect-[16/7] rounded-[12px] overflow-hidden mb-4">
-                          <Image src="/images/menu/men_in_suits.png" alt="Property Types" fill className="object-cover transition-transform duration-500 group-hover/col:scale-105" />
+                          <Image src="/images/menu/property-types.webp" alt="Property Types" fill sizes="(max-width: 1024px) 100vw, 33vw" className="object-cover transition-transform duration-500 group-hover/col:scale-105" />
                         </div>
-                        <h3 className="text-white font-semibold text-[18px] mb-1.5 transition-colors">Property Types</h3>
-                        <p className="text-white/70 text-[14px] leading-snug mb-4 flex-grow">Flat · Duplex · Detached · Bungalow<br />· Land · Shortlet · Commercial</p>
-                        <div className="text-white font-semibold text-[13px] uppercase tracking-wider flex items-center gap-1 group-hover/col:gap-2 transition-all mt-auto">
+                        <h3 className="text-brand-textWhite font-semibold text-h3-m mb-1.5 transition-colors">Property Types</h3>
+                        <p className="text-brand-textWhite/70 text-body leading-snug mb-4 flex-grow">Flat · Duplex · Detached · Bungalow<br />· Land · Shortlet · Commercial</p>
+                        <div className="text-brand-textWhite font-semibold text-nav uppercase tracking-wider flex items-center gap-1 group-hover/col:gap-2 transition-all mt-auto">
                           EXPLORE TYPES <CaretRight size={12} />
                         </div>
                       </Link>
@@ -157,13 +161,13 @@ export default function Navbar() {
                   )}
                   {activeDropdown === link.label && link.label !== 'LISTINGS' && (
                     <div
-                      className="absolute top-full left-0 mt-2 w-52 bg-[#fcfdf8] rounded-panel shadow-card py-2 z-50"
+                      className="absolute top-full left-0 mt-2 w-52 bg-brand-light1 rounded-panel shadow-card py-2 z-50"
                     >
                       {link.children.map((child) => (
                         <Link
                           key={child.label}
                           href={child.href}
-                          className="block px-4 py-2.5 text-[14px] text-navy hover:bg-beige hover:text-blue transition-colors"
+                          className="block px-4 py-2.5 text-body text-navy hover:bg-beige hover:text-blue transition-colors"
                           onClick={() => setActiveDropdown(null)}
                         >
                           {child.label}
@@ -191,23 +195,29 @@ export default function Navbar() {
 
           {/* CTA + Mobile Trigger */}
           <div className="flex flex-1 items-center justify-end gap-3 shrink-0">
-            <Link
-              href="/contact"
-              className="hidden lg:inline-flex items-center justify-center gap-2 bg-[#001a40] text-white font-semibold text-[13px] uppercase tracking-[0.02em] px-5 py-2.5 rounded-btn hover:bg-[#002a5e] transition-colors whitespace-nowrap"
+            <button
+              type="button"
+              onClick={openChat}
+              disabled={!PROPA_WIDGET_URL}
+              className="btn-cta-strong hidden lg:inline-flex items-center justify-center gap-2 bg-brand-navy text-brand-textWhite px-5 py-2.5 rounded-btn hover:bg-navy-light transition-colors whitespace-nowrap disabled:cursor-not-allowed disabled:opacity-50"
             >
-              CHAT WITH PROPA
-              <ArrowRight size={14} aria-hidden="true" />
-            </Link>
+              CHAT WITH PROPA AI
+              <span aria-hidden="true">›</span>
+            </button>
 
             <button
-              className="lg:hidden flex items-center justify-center w-10 h-10 rounded-panel text-navy hover:bg-beige transition-colors"
+              type="button"
+              className="lg:hidden flex flex-col items-center justify-center gap-[7px] w-10 h-10 rounded-panel text-navy hover:bg-beige transition-colors"
               onClick={() => setMobileOpen(!mobileOpen)}
               aria-label={mobileOpen ? "Close navigation menu" : "Open navigation menu"}
             >
               {mobileOpen ? (
-                <X size={20} aria-hidden="true" className="text-gray-400 hover:text-navy" />
+                <X size={20} aria-hidden="true" className="text-grey hover:text-navy" />
               ) : (
-                <List size={24} aria-hidden="true" />
+                <span className="flex w-[22px] flex-col gap-[7px]" aria-hidden>
+                  <span className="block h-[2px] w-full rounded-full bg-current" />
+                  <span className="block h-[2px] w-1/2 rounded-full bg-current" />
+                </span>
               )}
             </button>
           </div>
@@ -216,16 +226,19 @@ export default function Navbar() {
         {/* Mobile Navigation Links (rendered inside the expanding header) */}
         <div
           className={cn(
-            "lg:hidden flex flex-col items-center px-6 transition-opacity duration-300",
-            mobileOpen ? "opacity-100 delay-100" : "opacity-0"
+            'lg:hidden flex flex-col items-center px-6 transition-opacity duration-300',
+            /* opacity-0 alone still receives clicks — must disable hit-testing when closed */
+            mobileOpen
+              ? 'pointer-events-auto opacity-100 delay-100'
+              : 'pointer-events-none opacity-0'
           )}
+          aria-hidden={!mobileOpen}
         >
           <nav className="flex flex-col items-center py-6 gap-6 w-full border-t border-navy/5" aria-label="Mobile navigation">
             {[
               { label: 'ABOUT', href: '/about' },
               { label: 'ALL PROPERTIES', href: '/listings' },
               { label: 'NEIGHBORHOODS', href: '/neighborhood' },
-              { label: 'AGENTS', href: '/agents' },
               { label: 'SELL', href: '/sell' },
               { label: 'REVIEWS', href: '/reviews' },
               { label: 'SUBMIT PROPERTY', href: '/submit-property' },
@@ -245,14 +258,18 @@ export default function Navbar() {
 
           {/* Bottom CTA */}
           <div className="w-full pb-8 pt-2 flex justify-center">
-            <Link
-              href="/contact"
-              onClick={() => setMobileOpen(false)}
-              className="flex items-center justify-center gap-2 bg-[#001a40] text-white font-bold text-[13px] uppercase tracking-[0.02em] px-8 py-3.5 rounded-btn hover:bg-[#002a5e] transition-colors"
+            <button
+              type="button"
+              onClick={() => {
+                setMobileOpen(false)
+                openChat()
+              }}
+              disabled={!PROPA_WIDGET_URL}
+              className="btn-cta-strong flex items-center justify-center gap-2 bg-brand-navy text-brand-textWhite px-8 py-3.5 rounded-btn hover:bg-navy-light transition-colors disabled:cursor-not-allowed disabled:opacity-50"
             >
-              CHAT WITH PROPA
-              <CaretRight size={14} aria-hidden="true" />
-            </Link>
+              CHAT WITH PROPA AI
+              <span aria-hidden="true">›</span>
+            </button>
           </div>
         </div>
       </header>
