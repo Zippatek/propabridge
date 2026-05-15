@@ -16,9 +16,34 @@ export const metadata: Metadata = {
     'Find verified properties in Abuja, Kaduna, and Minna. Zero inspection fees. Zero fake listings. Physical + legal verification on every listing.',
 }
 
+const organizationSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'RealEstateAgent',
+  name: 'Propabridge',
+  url: 'https://propabridge.com',
+  logo: 'https://propabridge.com/logo-circle.jpg',
+  description:
+    'Buy, rent, or invest in verified properties across Nigeria. No fake listings. No inspection fees.',
+  areaServed: ['Abuja', 'Kaduna', 'Minna', 'Nigeria'],
+  address: {
+    '@type': 'PostalAddress',
+    addressCountry: 'NG',
+    addressRegion: 'FCT',
+    addressLocality: 'Abuja',
+  },
+  sameAs: [
+    'https://www.instagram.com/propabridge',
+    'https://www.linkedin.com/company/propabridge',
+  ],
+}
+
 export default function HomePage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+      />
       <HeroSection />
       <RecentListings />
       <LocationSection />
