@@ -7,6 +7,7 @@ import { PropertyGallery } from "@/components/listings/PropertyGallery";
 import { PropertyContentLayout } from "@/components/listings/PropertyContentLayout";
 import { RelatedPropertiesCTA } from "@/components/listings/RelatedPropertiesCTA";
 
+
 interface PageProps {
   params: Promise<{ slug: string }>;
 }

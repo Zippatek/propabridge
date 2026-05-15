@@ -7,7 +7,7 @@ import { PUBLIC_API_URL } from '@/lib/env-public'
 
 const API_URL = PUBLIC_API_URL
 
-const DEFAULT_TIMEOUT_MS = 3000
+const DEFAULT_TIMEOUT_MS = 15000
 
 // Wrapper around fetch that aborts after `timeoutMs` so server-rendered pages
 // never hang waiting on an unreachable backend.
@@ -203,14 +203,14 @@ function normalizeBlogDate(input?: string) {
   return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).toUpperCase()
 }
 
-function mapBlog(blog: Record<string, unknown>): FrontendBlog {
+function mapBlog(blog: Record<string, any>): FrontendBlog {
   return {
-    id: blog.slug || blog.id || blog.blog_id || '',
+    id: String(blog.slug || blog.id || blog.blog_id || ''),
     date: normalizeBlogDate(blog.published_at || blog.date || blog.created_at),
-    category: (blog.category || 'GUIDE').toString().toUpperCase(),
-    title: blog.title || '',
-    image: blog.cover_image || blog.image || '/images/blogs/rent.png',
-    authorName: blog.author_name || blog.authorName || 'PROPABRIDGE TEAM',
+    category: String(blog.category || 'GUIDE').toUpperCase(),
+    title: String(blog.title || ''),
+    image: String(blog.cover_image || blog.image || '/images/blogs/rent.png'),
+    authorName: String(blog.author_name || blog.authorName || 'PROPABRIDGE TEAM'),
     authorImage: blog.author_image || blog.authorImage || undefined,
     content: blog.content_html || blog.content || undefined,
     excerpt: blog.excerpt || blog.summary || undefined,
@@ -265,6 +265,26 @@ export async function fetchListings(filters?: {
   } catch {
     // Never serve mock property data in production paths.
     return []
+  }
+}
+
+export async function fetchPropertyFilters() {
+  try {
+    const res = await fetchWithTimeout(`${API_URL}/listings/filters`, { cache: 'no-store' });
+    if (!res.ok) throw new Error('Failed to fetch filters');
+    const json = await res.json();
+    const raw = json.data || [];
+    
+    // Return names exactly as they come from the API (dashboard mirror)
+    const allCategories = [
+      'ALL',
+      ...(Array.isArray(raw) ? raw.map((t: any) => t.name.toUpperCase()) : []),
+    ];
+    
+    return Array.from(new Set(allCategories));
+  } catch (error) {
+    console.error('fetchPropertyFilters error:', error);
+    return ['ALL', 'APARTMENT', 'HOUSE', 'DUPLEX', 'BUNGALOW', 'LAND', 'COMMERCIAL', 'VILLA', 'PENTHOUSE'];
   }
 }
 

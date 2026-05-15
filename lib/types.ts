@@ -2,7 +2,7 @@
 
 export type PropertyStatus = 'FOR SALE' | 'FOR RENT' | 'SOLD' | 'OFF-PLAN' | 'RESERVED'
 export type PropertyType = 'Apartment' | 'Terrace' | 'Detached' | 'Semi-Detached' | 'Land' | 'Commercial' | 'Off-Plan' | 'Duplex'
-export type PropertyCity = 'Abuja' | 'Kaduna' | 'Minna'
+export type PropertyCity = 'Abuja' | 'Kaduna' | 'Minna' | (string & {})
 export type VerificationStatus = 'VERIFIED' | 'PENDING' | 'FAILED'
 
 export interface Property {
