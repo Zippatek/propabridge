@@ -8,6 +8,7 @@ import PropaChatEmbed from '@/components/layout/PropaChatEmbed'
 import { PropaChatProvider } from '@/components/layout/PropaChatContext'
 import PageTransition from '@/components/PageTransition'
 import { PROPA_WIDGET_URL } from '@/lib/env-public'
+import Providers from './providers'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -16,22 +17,11 @@ const inter = Inter({
   variable: '--font-inter',
 })
 
-// ── Display font candidates for "buy. sell. rent." ────────────────────
-//
-// Realist uses a font close to Circular Std / GT Walsheim — both paid.
-// Key trait: lowercase letters have CURVED/ROUNDED foot terminals (the
-// bottom of b, l, u, y curves rather than cutting flat). These three
-// Google Fonts match that characteristic most closely:
-//
-//   Nunito Sans  — rounded terminals on all strokes, very close to Circular
-//   DM Sans      — humanist, soft terminals, modern real-estate feel
-//   Outfit       — geometric, slightly rounded, Proxima Nova-ish
-
 const nunitoSans = Nunito_Sans({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700', '800'],
   display: 'swap',
-  variable: '--font-display',           // ← currently active via --font-hero
+  variable: '--font-display',
 })
 
 const dmSans = DM_Sans({
@@ -45,7 +35,7 @@ const outfit = Outfit({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700', '800'],
   display: 'swap',
-  variable: '--font-display-syne',      // reusing same slot name
+  variable: '--font-display-syne',
 })
 
 export const viewport: Viewport = {
@@ -111,16 +101,18 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${nunitoSans.variable} ${dmSans.variable} ${outfit.variable}`} data-scroll-behavior="smooth">
       <body className={`${inter.className} antialiased overflow-x-hidden`}>
-        <PropaChatProvider widgetUrl={PROPA_WIDGET_URL}>
-          <Navbar />
-          <main id="main-content" tabIndex={-1}>
-            <Suspense fallback={null}>
-              <PageTransition>{children}</PageTransition>
-            </Suspense>
-          </main>
-          <ConditionalFooter />
-          <PropaChatEmbed />
-        </PropaChatProvider>
+        <Providers>
+          <PropaChatProvider widgetUrl={PROPA_WIDGET_URL}>
+            <Navbar />
+            <main id="main-content" tabIndex={-1}>
+              <Suspense fallback={null}>
+                <PageTransition>{children}</PageTransition>
+              </Suspense>
+            </main>
+            <ConditionalFooter />
+            <PropaChatEmbed />
+          </PropaChatProvider>
+        </Providers>
       </body>
     </html>
   )
